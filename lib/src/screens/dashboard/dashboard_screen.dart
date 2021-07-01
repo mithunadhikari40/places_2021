@@ -10,11 +10,11 @@ import 'package:places/src/viewmodels/dashboard/dashboard_view_model.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatelessWidget  {
   static const screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
+t?
   @override
   Widget build(BuildContext context) {
     return BaseWidget<DashboardViewModel>(
@@ -32,6 +32,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar(DashboardViewModel model, BuildContext context) {
+    if(model.currentIndex ==2) return AppBar(toolbarHeight: 0);
     return AppBar(
       title:
           Text(model.getAppbarTitle(), style: TextStyle(color: blackColor87)),
