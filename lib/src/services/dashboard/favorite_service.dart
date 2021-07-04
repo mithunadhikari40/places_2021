@@ -1,5 +1,4 @@
 import 'package:location/location.dart';
-import 'package:places/src/api/dashboard/explore_api.dart';
 import 'package:places/src/api/dashboard/favorite_api.dart';
 import 'package:places/src/model/dashboard/place_model.dart';
 import 'package:places/src/model/network_response_model.dart';
@@ -24,8 +23,18 @@ class FavoriteService {
   }
 
   void removeItem(int index) {
-    List<PlaceModel> list =  _places!.data!.cast<PlaceModel>();
+    List<PlaceModel> list = _places!.data!.cast<PlaceModel>();
     list.removeAt(index);
     _places!.data = list;
+  }
+
+  Future<void> removeFromApi(int index, PlaceModel place) async {
+    String token = authRxProvider.getToken!;
+    final response = await api.addOrRemoveFromFavorite(place.sId!, token);
+    if (!response.status) {
+      List<PlaceModel> list = _places!.data!.cast<PlaceModel>();
+      list.insert(index, place);
+      _places!.data = list;
+    }
   }
 }

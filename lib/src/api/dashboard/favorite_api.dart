@@ -26,4 +26,25 @@ class FavoriteApi {
           status: false, message: "$e".replaceAll("Exception:", ""));
     }
   }
+  Future<NetworkResponseModel> addOrRemoveFromFavorite(String placeId,String token) async {
+    try {
+      final uri = Uri.parse(AppUrl.FAVORITE_LIST_URL);
+      final response = await put(uri,
+          body: jsonEncode({"id":placeId}),
+          headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      });
+      final body = jsonDecode(response.body);
+      print("add or remove of favorite $body");
+      if (body["places"] == null) {
+        return NetworkResponseModel(status: false);
+      }
+      return NetworkResponseModel(status: true);
+    } catch (e) {
+      print("The favorite add or remove exception $e");
+      return NetworkResponseModel(
+          status: false, message: "$e".replaceAll("Exception:", ""));
+    }
+  }
 }

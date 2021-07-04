@@ -19,16 +19,14 @@ class FavoriteViewModel extends BaseViewModel {
     setBusy(false);
   }
 
-  void removeItem(PlaceModel place) {
+  void removeItem(PlaceModel place) async{
     List<PlaceModel> list =  service.places.data!.cast<PlaceModel>();
     int index = list.indexWhere((element) => element.sId == place.sId);
     // it just removes the item from the service
     service.removeItem(index);
     notifyListeners();
     // removes from api and returns the response
-    // await service.removeFromApi(index,place);
-    // notifyListeners();
-
-
+    await service.removeFromApi(index,place);
+    notifyListeners();
   }
 }

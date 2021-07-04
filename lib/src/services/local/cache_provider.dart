@@ -20,4 +20,9 @@ class CacheProvider {
     if (_preferences == null) await _init();
     _preferences!.setString(key, value);
   }
+
+  Future<void> clear() async{
+    if (_preferences == null) await _init();
+    _preferences!.clear();
+  }
 }

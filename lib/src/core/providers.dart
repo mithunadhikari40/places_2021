@@ -7,6 +7,7 @@ import 'package:places/src/services/auth_rx_provider.dart';
 import 'package:places/src/services/dashboard/dashboard_service.dart';
 import 'package:places/src/services/dashboard/explore_service.dart';
 import 'package:places/src/services/dashboard/favorite_service.dart';
+import 'package:places/src/services/dashboard/profile_detail_service.dart';
 import 'package:places/src/services/local/cache_provider.dart';
 import 'package:places/src/services/local/db_provider.dart';
 import 'package:places/src/services/splash_service.dart';
@@ -39,6 +40,19 @@ final List<SingleChildWidget> dependantProviders = [
           dbProvider: dbProvider);
     },
   ),
+  ProxyProvider3<DbProvider, CacheProvider, AuthRxProvider,
+      ProfileDetailService>(
+    update: (BuildContext context,
+        DbProvider dbProvider,
+        CacheProvider cacheProvider,
+        AuthRxProvider authRxProvider,
+        ProfileDetailService? service) {
+      return ProfileDetailService(
+          authRxProvider: authRxProvider,
+          cacheProvider: cacheProvider,
+          dbProvider: dbProvider);
+    },
+  ),
   ProxyProvider4<AuthApi, DbProvider, CacheProvider, AuthRxProvider,
       AuthService>(
     update: (BuildContext context,
@@ -55,7 +69,8 @@ final List<SingleChildWidget> dependantProviders = [
     },
   ),
   ProxyProvider<AuthRxProvider, DashboardService>(
-    update: (BuildContext context, AuthRxProvider authRxProvider, DashboardService? service) {
+    update: (BuildContext context, AuthRxProvider authRxProvider,
+        DashboardService? service) {
       return DashboardService(authRxProvider: authRxProvider);
     },
   ),

@@ -14,7 +14,7 @@ class DashboardScreen extends StatelessWidget  {
   static const screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-t?
+
   @override
   Widget build(BuildContext context) {
     return BaseWidget<DashboardViewModel>(
@@ -32,7 +32,7 @@ t?
   }
 
   AppBar _buildAppBar(DashboardViewModel model, BuildContext context) {
-    if(model.currentIndex ==2) return AppBar(toolbarHeight: 0);
+    if(model.currentIndex == 2) return AppBar(toolbarHeight: 0);
     return AppBar(
       title:
           Text(model.getAppbarTitle(), style: TextStyle(color: blackColor87)),

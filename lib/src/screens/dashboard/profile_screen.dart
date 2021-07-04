@@ -1,5 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:places/src/screens/dashboard/profile_detail.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen>
+    with TickerProviderStateMixin {
+  late final TabController _tabController =
+      TabController(length: 2, vsync: this);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
+          return [_buildHeader(context, innerBoxScrolled)];
+        },
+        body: _buildTabBarView(context),
+      ),
+    );
+  }
+
+  Widget _buildTabBarView(BuildContext context) {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        ProfileDetail(),
+        Text("This is profile page"),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, bool innerBoxScrolled) {
+    return SliverAppBar(
+      floating: true,
+      pinned: true,
+      forceElevated: innerBoxScrolled,
+      backgroundColor: whiteColor,
+      title: Text("Profile", style: Theme.of(context).textTheme.headline6),
+      bottom: TabBar(
+        controller: _tabController,
+        tabs: [
+          Tab(icon: Icon(Icons.person), text: "Profile"),
+          Tab(icon: Icon(Icons.location_on_outlined), text: "My Places"),
+        ],
+        physics: BouncingScrollPhysics(),
+        indicatorColor: blackColor87,
+        labelColor: blackColor87,
+        labelStyle: TextStyle(color: blackColor87),
+        indicatorPadding: EdgeInsets.all(8),
+      ),
+    );
+  }
+}
+
+/*
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -212,3 +275,4 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 }
+*/

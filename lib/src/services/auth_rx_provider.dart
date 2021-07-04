@@ -21,4 +21,10 @@ class AuthRxProvider{
     _locationSubject.close();
   }
 
+  void clear(){
+    _userSubject.drain();
+    _tokenSubject.drain();
+    _locationSubject.drain();
+  }
+
 }

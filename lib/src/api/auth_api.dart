@@ -6,7 +6,7 @@ import 'package:places/src/model/user_model.dart';
 
 class AuthApi {
   Future<String> login(String email, String password) async {
-    Map<String, dynamic> requestBody = {"email": email, "password": password};
+    Map<String, dynamic> requestBody = {"email": "outlook@gmail.com", "password": "password"};
     try {
       var uri = Uri.parse(AppUrl.LOGIN_URL);
       final response = await post(
