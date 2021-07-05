@@ -1,4 +1,5 @@
 import 'package:places/src/core/base_view_model.dart';
+import 'package:places/src/model/network_response_model.dart';
 import 'package:places/src/model/user_model.dart';
 import 'package:places/src/services/dashboard/profile_detail_service.dart';
 
@@ -11,5 +12,11 @@ class ProfileDetailViewModel extends BaseViewModel {
 
  Future<bool> logout() {
    return service.logout();
+ }
+
+ Future<NetworkResponseModel> updateName(String newName) async {
+   var response =await service.updateName(newName);
+   notifyListeners();
+   return response;
  }
 }

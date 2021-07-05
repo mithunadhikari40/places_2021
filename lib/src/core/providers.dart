@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:places/src/api/auth_api.dart';
 import 'package:places/src/api/dashboard/explore_api.dart';
 import 'package:places/src/api/dashboard/favorite_api.dart';
+import 'package:places/src/api/dashboard/profile_api.dart';
 import 'package:places/src/services/auth/auth_service.dart';
 import 'package:places/src/services/auth_rx_provider.dart';
 import 'package:places/src/services/dashboard/dashboard_service.dart';
@@ -24,6 +25,7 @@ final List<SingleChildWidget> independentProviders = [
   Provider.value(value: ExploreApi()),
   Provider.value(value: FavoriteApi()),
   Provider.value(value: DbProvider()),
+  Provider.value(value: ProfileApi()),
   Provider.value(value: CacheProvider()),
   Provider.value(value: AuthRxProvider()),
 ];
@@ -40,15 +42,17 @@ final List<SingleChildWidget> dependantProviders = [
           dbProvider: dbProvider);
     },
   ),
-  ProxyProvider3<DbProvider, CacheProvider, AuthRxProvider,
+  ProxyProvider4<DbProvider, CacheProvider, AuthRxProvider, ProfileApi,
       ProfileDetailService>(
     update: (BuildContext context,
         DbProvider dbProvider,
         CacheProvider cacheProvider,
         AuthRxProvider authRxProvider,
+        ProfileApi api,
         ProfileDetailService? service) {
       return ProfileDetailService(
           authRxProvider: authRxProvider,
+          api: api,
           cacheProvider: cacheProvider,
           dbProvider: dbProvider);
     },

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/src/core/base_widget.dart';
+import 'package:places/src/screens/auth/login_screen.dart';
+import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/dashboard/profile_detail_view_model.dart';
+import 'package:places/src/widgets/bottomsheet/change_name_bottom_sheet.dart';
 import 'package:places/src/widgets/bottomsheet/log_out_bottom_sheet.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +21,7 @@ class ProfileDetail extends StatelessWidget {
               _buildUserDetail(context, model),
               //-- create a enough space,
               SizedBox(height: MediaQuery.of(context).size.height / 5.2),
-              _buildChangeNameSection(context),
+              _buildChangeNameSection(context,model),
               Divider(), _buildChangeEmailSection(context),
               Divider(), _buildChangePhoneSection(context),
               Divider(), _buildChangePasswordSection(context),
@@ -31,14 +34,18 @@ class ProfileDetail extends StatelessWidget {
         });
   }
 
-  Widget _buildChangeNameSection(BuildContext context) {
+  Widget _buildChangeNameSection(BuildContext context, ProfileDetailViewModel model) {
     return ListTile(
       title: Text(
         "Change Name",
         style: Theme.of(context).textTheme.subtitle2,
       ),
       leading: Icon(Icons.person),
-      onTap: () {},
+      onTap: () {
+        showChangeNameBottomSheet(context,(String newName){
+          _updateName(newName,context,model);
+        });
+      },
     );
   }
 
@@ -126,8 +133,10 @@ class ProfileDetail extends StatelessWidget {
       ),
       leading: Icon(Icons.exit_to_app),
       onTap: () async {
-        showLogoutBottomSheet(context);
-        // _logout(context, model);
+        showLogoutBottomSheet(context, () {
+          _logout(context, model);
+        });
+        //
       },
     );
   }
@@ -151,9 +160,12 @@ class ProfileDetail extends StatelessWidget {
     // if response is true, then logout, else show an error message
     if (response) {
       //log out the user
-
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => LoginScreen()),
+          (route) => route.isFirst);
     } else {
       //show an error
+      showSnackBar(context, "Could not log you out now, please try again");
     }
   }
 
@@ -214,5 +226,27 @@ class ProfileDetail extends StatelessWidget {
         fit: BoxFit.cover,
       ),
     );
+  }
+
+  Future<void> _updateName(String newName, BuildContext context, ProfileDetailViewModel model) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          );
+        });
+    final response = await model.updateName(newName);
+
+    Navigator.of(context).pop();
+    if (response.status) {
+      showSnackBar(context, "Name updated successfully");
+    } else {
+      showSnackBar(context, response.message!);
+    }
   }
 }

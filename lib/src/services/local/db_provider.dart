@@ -38,6 +38,12 @@ class DbProvider {
     return _db!.insert(USER_TABLE, user.toDb());
   }
 
+  Future<int> updateName(String id, UserModel user) async {
+    if (_db == null) await _init();
+    return _db!.update(USER_TABLE, user.toDb(),where: "id = ?", whereArgs: [id]);
+
+  }
+
   Future<UserModel?> getUser() async {
     if (_db == null) await _init();
     final data = await _db!.query(USER_TABLE);
