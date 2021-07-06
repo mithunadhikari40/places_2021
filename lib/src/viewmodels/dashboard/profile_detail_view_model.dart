@@ -19,4 +19,14 @@ class ProfileDetailViewModel extends BaseViewModel {
    notifyListeners();
    return response;
  }
+ Future<NetworkResponseModel> updatePassword(String newPassword) async {
+   var response =await service.updatePassword(newPassword);
+   return response;
+ }
+
+  Future<NetworkResponseModel> updateProfilePic(String path) async {
+    var response =await service.updateProfilePic(path);
+    notifyListeners();
+    return response;
+  }
 }

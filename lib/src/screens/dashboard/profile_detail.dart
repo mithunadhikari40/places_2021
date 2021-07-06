@@ -1,9 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/src/core/base_widget.dart';
+import 'package:places/src/model/network_response_model.dart';
 import 'package:places/src/screens/auth/login_screen.dart';
+import 'package:places/src/utils/image_helper.dart';
+import 'package:places/src/utils/show_overlay_loading_indicator.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/dashboard/profile_detail_view_model.dart';
 import 'package:places/src/widgets/bottomsheet/change_name_bottom_sheet.dart';
+import 'package:places/src/widgets/bottomsheet/change_password_bottom_sheet.dart';
+import 'package:places/src/widgets/bottomsheet/choose_image_option_bottom_sheet.dart';
 import 'package:places/src/widgets/bottomsheet/log_out_bottom_sheet.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -21,10 +29,10 @@ class ProfileDetail extends StatelessWidget {
               _buildUserDetail(context, model),
               //-- create a enough space,
               SizedBox(height: MediaQuery.of(context).size.height / 5.2),
-              _buildChangeNameSection(context,model),
+              _buildChangeNameSection(context, model),
               Divider(), _buildChangeEmailSection(context),
               Divider(), _buildChangePhoneSection(context),
-              Divider(), _buildChangePasswordSection(context),
+              Divider(), _buildChangePasswordSection(context, model),
               Divider(), _buildPrivacyPolicySection(context),
               Divider(), _buildPrivacyTermsAndConditionSection(context),
               Divider(), _buildAboutUsSection(context),
@@ -34,7 +42,8 @@ class ProfileDetail extends StatelessWidget {
         });
   }
 
-  Widget _buildChangeNameSection(BuildContext context, ProfileDetailViewModel model) {
+  Widget _buildChangeNameSection(
+      BuildContext context, ProfileDetailViewModel model) {
     return ListTile(
       title: Text(
         "Change Name",
@@ -42,8 +51,8 @@ class ProfileDetail extends StatelessWidget {
       ),
       leading: Icon(Icons.person),
       onTap: () {
-        showChangeNameBottomSheet(context,(String newName){
-          _updateName(newName,context,model);
+        showChangeNameBottomSheet(context, (String newName) {
+          _updateName(newName, context, model);
         });
       },
     );
@@ -71,14 +80,19 @@ class ProfileDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildChangePasswordSection(BuildContext context) {
+  Widget _buildChangePasswordSection(
+      BuildContext context, ProfileDetailViewModel model) {
     return ListTile(
       title: Text(
         "Change Password",
         style: Theme.of(context).textTheme.subtitle2,
       ),
       leading: Icon(Icons.lock),
-      onTap: () {},
+      onTap: () {
+        showChangePasswordBottomSheet(context, (String newPassword) {
+          _updatePassword(context, model, newPassword);
+        });
+      },
     );
   }
 
@@ -143,20 +157,9 @@ class ProfileDetail extends StatelessWidget {
 
   Future<void> _logout(
       BuildContext context, ProfileDetailViewModel model) async {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-            ],
-          );
-        });
-    final response = await model.logout();
+    final response =
+        await showOverlayLoadingIndicator<bool>(context, model.logout());
 
-    Navigator.of(context).pop();
     // if response is true, then logout, else show an error message
     if (response) {
       //log out the user
@@ -183,7 +186,7 @@ class ProfileDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildProfilePicture(context),
+              _buildProfilePicture(context, model),
               SizedBox(height: 8),
               Text(
                 "${model.currentUser.name}",
@@ -201,18 +204,27 @@ class ProfileDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildProfilePicture(BuildContext context) {
+  Widget _buildProfilePicture(
+      BuildContext context, ProfileDetailViewModel model) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width / 3,
-      height: size.width / 3,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size.width / 6),
-          border: Border.all(width: 10, color: whiteColor),
-          image: DecorationImage(
-              fit: BoxFit.contain,
-              image: NetworkImage(
-                  "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_1280.png"))),
+    return InkWell(
+      onTap: (){
+          showChoseImageOptionBottomSheet(context, (ImageSource source){
+            _chooseProfilePic(context,model,source);
+          });
+      },
+      child: Container(
+        width: size.width / 3,
+        height: size.width / 3,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(size.width / 6),
+            border: Border.all(width: 10, color: whiteColor),
+            image: DecorationImage(
+                fit: BoxFit.contain,
+                image: NetworkImage(model.currentUser.profilePic != null
+                    ? getImage(model.currentUser.profilePic!)
+                    : "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_1280.png"))),
+      ),
     );
   }
 
@@ -228,25 +240,40 @@ class ProfileDetail extends StatelessWidget {
     );
   }
 
-  Future<void> _updateName(String newName, BuildContext context, ProfileDetailViewModel model) async {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-            ],
-          );
-        });
-    final response = await model.updateName(newName);
+  Future<void> _updateName(String newName, BuildContext context,
+      ProfileDetailViewModel model) async {
+    final response = await showOverlayLoadingIndicator<NetworkResponseModel>(
+        context, model.updateName(newName));
 
-    Navigator.of(context).pop();
     if (response.status) {
       showSnackBar(context, "Name updated successfully");
     } else {
       showSnackBar(context, response.message!);
+    }
+  }
+
+  void _updatePassword(BuildContext context, ProfileDetailViewModel model,
+      String newPassword) async {
+    final response = await showOverlayLoadingIndicator<NetworkResponseModel>(
+      context,
+      model.updatePassword(newPassword),
+    );
+
+    if (response.status) {
+      showSnackBar(context, "Password updated successfully");
+    } else {
+      showSnackBar(context, response.message!);
+    }
+  }
+
+  Future<void> _chooseProfilePic(BuildContext context, ProfileDetailViewModel model, ImageSource source) async {
+    PickedFile? pickedImage=  await ImagePicker().getImage(source: source);
+    if(pickedImage ==null){
+      showSnackBar(context,"Could not pick image");
+    }else{
+      File file = File(pickedImage.path);
+      //todo show overlay container
+      model.updateProfilePic(file.absolute.path);
     }
   }
 }

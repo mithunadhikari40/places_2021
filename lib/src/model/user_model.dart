@@ -5,6 +5,8 @@ class UserModel {
   String? email;
   int? phone;
   String? registrationDate;
+  String? coverPic;
+  String? profilePic;
 
   UserModel(
       {this.isAdmin,
@@ -12,6 +14,8 @@ class UserModel {
       this.name,
       this.email,
       this.phone,
+        this.profilePic,
+        this.coverPic,
       this.registrationDate});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +24,8 @@ class UserModel {
     name = json['name'];
     email = json['email'];
     phone = json['phone'];
+    coverPic = json['coverPic'];
+    profilePic = json['profilePic'];
     registrationDate = json['registrationDate'];
   }
 
@@ -29,6 +35,8 @@ class UserModel {
     name = json['name'];
     email = json['email'];
     phone = json['phone'];
+    coverPic = json['coverPic'];
+    profilePic = json['profilePic'];
     registrationDate = json['registrationDate'];
   }
 
@@ -39,6 +47,8 @@ class UserModel {
     data['name'] = this.name;
     data['email'] = this.email;
     data['phone'] = this.phone;
+    data['coverPic'] = this.coverPic;
+    data['profilePic'] = this.profilePic;
     data['registrationDate'] = this.registrationDate;
     return data;
   }
@@ -50,6 +60,8 @@ class UserModel {
     data['name'] = this.name;
     data['email'] = this.email;
     data['phone'] = this.phone;
+    data['coverPic'] = this.coverPic;
+    data['profilePic'] = this.profilePic;
     data['registrationDate'] = this.registrationDate;
     return data;
   }

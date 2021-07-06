@@ -9,6 +9,11 @@ import 'package:sqflite/sqflite.dart';
 class DbProvider {
   Database? _db;
 
+  static Map<int, List<String>> migrations = {
+    2:["ALTER TABLE $USER_TABLE ADD COLUMN profilePic TEXT"],
+    3:["ALTER TABLE $USER_TABLE ADD COLUMN coverPic TEXT"],
+  };
+
   DbProvider() {
     _init();
   }
@@ -16,10 +21,12 @@ class DbProvider {
   Future<void> _init() async {
     Directory dir = await getApplicationDocumentsDirectory();
     final dbPath = path.join(dir.path, DB_NAME);
-    _db = await openDatabase(dbPath, version: 1,
-        onCreate: (Database newDb, int version) {
-      Batch batch = newDb.batch();
-      batch.execute("""
+    _db = await openDatabase(
+      dbPath,
+      version: 3,
+      onCreate: (Database newDb, int version) {
+        Batch batch = newDb.batch();
+        batch.execute("""
             CREATE TABLE $USER_TABLE (
               id TEXT PRIMARY KEY,
               isAdmin INTEGER,
@@ -29,9 +36,31 @@ class DbProvider {
               registrationDate TEXT
             )
         """);
-      batch.commit();
-    });
+       for(var item in migrations.values){
+         item.forEach((element) {
+           batch.execute(element);
+         });
+       }
+        batch.commit();
+      },
+      onUpgrade: (Database newDb, int oldVersion, int newVersion){
+        Batch batch = newDb.batch();
+        /// newVersion -3, oldVersion -> 1/2
+
+        for(int i =oldVersion+1;i <= newVersion;i++){
+          migrations[i]!.forEach((element) {
+            batch.execute(element);
+          });
+
+        }
+        batch.commit();
+
+      }
+    );
   }
+
+
+
 
   Future<int> insertUser(UserModel user) async {
     if (_db == null) await _init();
@@ -40,8 +69,8 @@ class DbProvider {
 
   Future<int> updateName(String id, UserModel user) async {
     if (_db == null) await _init();
-    return _db!.update(USER_TABLE, user.toDb(),where: "id = ?", whereArgs: [id]);
-
+    return _db!
+        .update(USER_TABLE, user.toDb(), where: "id = ?", whereArgs: [id]);
   }
 
   Future<UserModel?> getUser() async {
