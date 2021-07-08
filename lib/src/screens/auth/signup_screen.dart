@@ -2,7 +2,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:places/src/core/base_widget.dart';
-import 'package:places/src/screens/dashboard/dashboard_screen.dart';
+import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/auth/signup_view_model.dart';
 import 'package:places/src/widgets/custom_app_bar.dart';
@@ -120,13 +120,7 @@ class SignUpScreen extends StatelessWidget {
       child: ButtonTheme(
         minWidth: MediaQuery.of(context).size.width,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                side: BorderSide.none),
-            padding: EdgeInsets.all(18.0),
-            primary: primaryColor,
-          ),
+
           onPressed: model.busy
               ? null
               : () {
@@ -143,9 +137,7 @@ class SignUpScreen extends StatelessWidget {
     await model.signup(_nameController.text,_phoneController.text,
         _emailController.text, _passwordController.text);
     if (success) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        return DashboardScreen();
-      }));
+      Navigator.of(context).pushReplacementNamed(RoutePaths.HOME);
     } else {
       showSnackBar(context, model.errorMessage);
     }

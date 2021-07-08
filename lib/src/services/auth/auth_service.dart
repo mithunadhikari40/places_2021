@@ -1,4 +1,5 @@
 import 'package:places/src/api/auth_api.dart';
+import 'package:places/src/core/base_request.dart';
 import 'package:places/src/core/constants/app_constants.dart';
 import 'package:places/src/model/user_model.dart';
 import 'package:places/src/services/auth_rx_provider.dart';
@@ -26,6 +27,8 @@ class AuthService {
     try {
       String token = await api.login(email, password);
       // fetch user profile, save in our local database, save token in local cache,
+      baseRequest.setDefaultHeaders({"x-auth-token":token});
+
       return fetchUserDetail(token);
     } catch (e) {
       _errorMessage = "$e".replaceAll("Exception:", "");
@@ -36,6 +39,7 @@ class AuthService {
     try {
       String token = await api.register(name,phone,email, password);
       // fetch user profile, save in our local database, save token in local cache,
+      baseRequest.setDefaultHeaders({"x-auth-token":token});
       return fetchUserDetail(token);
     } catch (e) {
       _errorMessage = "$e".replaceAll("Exception:", "");
@@ -45,7 +49,7 @@ class AuthService {
 
   Future<bool> fetchUserDetail(String token) async {
     try {
-      UserModel user = await api.fetchUserDetail(token);
+      UserModel user = await api.fetchUserDetail();
       await dbProvider.insertUser(user);
       await cacheProvider.setStringValue(TOKEN_KEY, token);
       authRxProvider.addToken(token);

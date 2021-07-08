@@ -17,8 +17,7 @@ class FavoriteService {
   LocationData? get currentLocation => authRxProvider.getLocation;
 
   Future<void> getAllPlaces() async {
-    String token = authRxProvider.getToken!;
-    final response = await api.getAllPlaces(token);
+    final response = await api.getAllPlaces();
     _places = response;
   }
 
@@ -29,8 +28,7 @@ class FavoriteService {
   }
 
   Future<void> removeFromApi(int index, PlaceModel place) async {
-    String token = authRxProvider.getToken!;
-    final response = await api.addOrRemoveFromFavorite(place.sId!, token);
+    final response = await api.addOrRemoveFromFavorite(place.sId!);
     if (!response.status) {
       List<PlaceModel> list = _places!.data!.cast<PlaceModel>();
       list.insert(index, place);

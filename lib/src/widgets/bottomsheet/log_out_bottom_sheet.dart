@@ -34,10 +34,6 @@ void showLogoutBottomSheet(BuildContext context,VoidCallback callback) {
                       minWidth: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide.none),
-                          padding: EdgeInsets.all(18.0),
                           primary: redColor,
                         ),
                         onPressed: () {
@@ -56,13 +52,6 @@ void showLogoutBottomSheet(BuildContext context,VoidCallback callback) {
                     child: ButtonTheme(
                       minWidth: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide.none),
-                          padding: EdgeInsets.all(18.0),
-                          primary: primaryColor,
-                        ),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },

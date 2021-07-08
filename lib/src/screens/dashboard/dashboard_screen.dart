@@ -35,8 +35,7 @@ class DashboardScreen extends StatelessWidget  {
     if(model.currentIndex == 2) return AppBar(toolbarHeight: 0);
     return AppBar(
       title:
-          Text(model.getAppbarTitle(), style: TextStyle(color: blackColor87)),
-      backgroundColor: whiteColor,
+          Text(model.getAppbarTitle()),
       leading: IconButton(
         icon: Icon(
           Icons.menu,

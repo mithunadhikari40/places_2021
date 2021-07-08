@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/src/core/base_widget.dart';
+import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/model/network_response_model.dart';
-import 'package:places/src/screens/auth/login_screen.dart';
 import 'package:places/src/utils/image_helper.dart';
 import 'package:places/src/utils/show_overlay_loading_indicator.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
@@ -163,9 +163,9 @@ class ProfileDetail extends StatelessWidget {
     // if response is true, then logout, else show an error message
     if (response) {
       //log out the user
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => LoginScreen()),
-          (route) => route.isFirst);
+      Navigator.of(context).pushNamedAndRemoveUntil(RoutePaths.LOGIN,(route){
+        return route.settings.name == RoutePaths.LOGIN;
+      });
     } else {
       //show an error
       showSnackBar(context, "Could not log you out now, please try again");
@@ -176,7 +176,7 @@ class ProfileDetail extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildCoverImage(context),
+        _buildCoverImage(context, model),
         Positioned(
           top: MediaQuery.of(context).size.height / 12,
           left: 0,
@@ -208,10 +208,10 @@ class ProfileDetail extends StatelessWidget {
       BuildContext context, ProfileDetailViewModel model) {
     final size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: (){
-          showChoseImageOptionBottomSheet(context, (ImageSource source){
-            _chooseProfilePic(context,model,source);
-          });
+      onTap: () {
+        showChoseImageOptionBottomSheet(context, (ImageSource source) {
+          _chooseProfilePic(context, model, source);
+        });
       },
       child: Container(
         width: size.width / 3,
@@ -228,14 +228,23 @@ class ProfileDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildCoverImage(BuildContext context) {
+  Widget _buildCoverImage(BuildContext context, ProfileDetailViewModel model) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width,
-      height: size.height / 5,
-      child: Image.network(
-        "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_1280.png",
-        fit: BoxFit.cover,
+    return InkWell(
+      onTap: (){
+        showChoseImageOptionBottomSheet(context, (ImageSource source){
+          _chooseCoverPic(context,model,source);
+        });
+      },
+      child: Container(
+        width: size.width,
+        height: size.height / 5,
+        child: Image.network(
+          model.currentUser.coverPic != null
+              ? getImage(model.currentUser.coverPic!)
+              : "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_1280.png",
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
@@ -266,14 +275,40 @@ class ProfileDetail extends StatelessWidget {
     }
   }
 
-  Future<void> _chooseProfilePic(BuildContext context, ProfileDetailViewModel model, ImageSource source) async {
-    PickedFile? pickedImage=  await ImagePicker().getImage(source: source);
-    if(pickedImage ==null){
-      showSnackBar(context,"Could not pick image");
-    }else{
+  Future<void> _chooseProfilePic(BuildContext context,
+      ProfileDetailViewModel model, ImageSource source) async {
+    PickedFile? pickedImage = await ImagePicker().getImage(source: source);
+    if (pickedImage == null) {
+      showSnackBar(context, "Could not pick image");
+    } else {
       File file = File(pickedImage.path);
-      //todo show overlay container
-      model.updateProfilePic(file.absolute.path);
+      final response = await showOverlayLoadingIndicator<NetworkResponseModel>(
+        context,
+        model.updateProfilePic(file.absolute.path),
+      );
+      if (response.status) {
+        showSnackBar(context, "Profile picture updated successfully");
+      } else {
+        showSnackBar(context, response.message!);
+      }
+    }
+  }
+
+  Future<void> _chooseCoverPic(BuildContext context, ProfileDetailViewModel model, ImageSource source) async {
+    PickedFile? pickedImage = await ImagePicker().getImage(source: source);
+    if (pickedImage == null) {
+      showSnackBar(context, "Could not pick image");
+    } else {
+      File file = File(pickedImage.path);
+      final response = await showOverlayLoadingIndicator<NetworkResponseModel>(
+        context,
+        model.updateCoverPic(file.absolute.path),
+      );
+      if (response.status) {
+        showSnackBar(context, "Cover picture updated successfully");
+      } else {
+        showSnackBar(context, response.message!);
+      }
     }
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/widgets/input_name.dart';
-import 'package:places/src/widgets/shared/app_colors.dart';
 import 'dart:math' as Math;
 
 void showChangeNameBottomSheet(BuildContext context,Function(String value) callback) {
@@ -38,13 +37,6 @@ void showChangeNameBottomSheet(BuildContext context,Function(String value) callb
                     child: ButtonTheme(
                       minWidth: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide.none),
-                          padding: EdgeInsets.all(18.0),
-                          primary: primaryColor,
-                        ),
                         onPressed: () {
                           // validation logic, validate the name
                           if(controller.text.trim().length<4){

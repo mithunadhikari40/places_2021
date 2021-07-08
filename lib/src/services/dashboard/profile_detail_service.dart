@@ -29,8 +29,7 @@ class ProfileDetailService {
   }
 
   Future<NetworkResponseModel> updateName(String newName) async {
-    String token = authRxProvider.getToken!;
-    final response = await api.updateName(newName, token);
+    final response = await api.updateName(newName);
     if (response.status) {
       final user = authRxProvider.getUser!;
       user.name = newName;
@@ -40,22 +39,20 @@ class ProfileDetailService {
     return response;
   }
 
-  Future<NetworkResponseModel> updateProfilePic(String imagePth) async {
-    String token = authRxProvider.getToken!;
-    final response = await api.updateProfilePic(imagePth, token);
+  Future<NetworkResponseModel> updateProfilePic(String imagePth, String url) async {
+    final response = await api.updateProfilePic(imagePth,url);
     if (response.status) {
-      final user = authRxProvider.getUser!;
+      // final user = authRxProvider.getUser!;
       UserModel newUser = response.data!;
-      user.profilePic = newUser.profilePic!;
-      authRxProvider.addUser(user);
-      await dbProvider.updateName(user.sId!, user);
+      // user.profilePic = newUser.profilePic!;
+      authRxProvider.addUser(newUser);
+      await dbProvider.updateName(newUser.sId!, newUser);
     }
     return response;
   }
 
   Future<NetworkResponseModel> updatePassword(String newPassword) async {
-    String token = authRxProvider.getToken!;
-    final response = await api.updatePassword(newPassword, token);
+    final response = await api.updatePassword(newPassword);
     if (response.status) {
       authRxProvider.addToken(response.data!);
       await cacheProvider.setStringValue(TOKEN_KEY, response.data!);

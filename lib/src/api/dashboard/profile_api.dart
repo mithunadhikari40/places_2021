@@ -2,18 +2,18 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:places/src/core/base_request.dart';
 import 'package:places/src/core/constants/app_url.dart';
 import 'package:places/src/model/network_response_model.dart';
 import 'package:places/src/model/user_model.dart';
 
 class ProfileApi {
-  Future<NetworkResponseModel> updateName(String name, String token) async {
+  Future<NetworkResponseModel> updateName(String name) async {
     try {
       final uri = Uri.parse(AppUrl.UPDATE_NAME_URL);
-      final response = await put(
+      final response = await baseRequest.put(
         uri,
         body: jsonEncode({"name": name}),
-        headers: {"Content-Type": "application/json", "x-auth-token": token},
       );
       final body = jsonDecode(response.body);
       print("update name response $body");
@@ -27,13 +27,12 @@ class ProfileApi {
   }
 
   Future<NetworkResponseModel> updatePassword(
-      String password, String token) async {
+      String password) async {
     try {
       final uri = Uri.parse(AppUrl.UPDATE_PASSWORD_URL);
-      final response = await put(
+      final response = await baseRequest.put(
         uri,
         body: jsonEncode({"password": password}),
-        headers: {"Content-Type": "application/json", "x-auth-token": token},
       );
       final body = jsonDecode(response.body);
 
@@ -51,9 +50,9 @@ class ProfileApi {
   }
 
   Future<NetworkResponseModel> updateProfilePic(
-      String imagePath, String token) async {
+      String imagePath, String url) async {
     try {
-      final uri = Uri.parse(AppUrl.UPDATE_PROFILE_PIC_URL);
+      final uri = Uri.parse(url);
 
       MultipartRequest request = MultipartRequest('PUT', uri);
 
@@ -63,16 +62,13 @@ class ProfileApi {
       //   "address":"Temp Address",
       // });
 
-      request.headers.addAll(
-          {"content-type": "multipart/form-data", "x-auth-token": token});
-
       final imageBody = await MultipartFile.fromPath(
         "image",
         imagePath,
         contentType: MediaType("image","jpg")
       );
       request.files.add(imageBody);
-      final streamedResponse = await request.send();
+      final streamedResponse = await baseRequest.send(request);
       final response = await Response.fromStream(streamedResponse);
 
       final body = jsonDecode(response.body);

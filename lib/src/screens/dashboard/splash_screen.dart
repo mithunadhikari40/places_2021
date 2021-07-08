@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:places/src/core/base_widget.dart';
-import 'package:places/src/screens/dashboard/dashboard_screen.dart';
-import 'package:places/src/screens/auth/login_screen.dart';
+import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/viewmodels/splash_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -39,13 +38,13 @@ class SplashScreen extends StatelessWidget {
     //wait for 1500ms
     await Future.delayed(Duration(milliseconds: 1500));
     // navigate to LoginScreen if isLoggedIn == false else to DashboardScreen
-    Widget? screen;
+    String? screen;
     if (isLoggedIn) {
-      screen = DashboardScreen();
+      screen = RoutePaths.HOME;
     } else {
-      screen = LoginScreen();
+      screen = RoutePaths.LOGIN;
     }
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (_) => screen!));
+        .pushReplacementNamed(screen);
   }
 }

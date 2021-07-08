@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:places/src/core/base_widget.dart';
-import 'package:places/src/screens/dashboard/dashboard_screen.dart';
-import 'package:places/src/screens/auth/signup_screen.dart';
+import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/services/auth/auth_service.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/auth/login_view_model.dart';
@@ -140,13 +139,6 @@ class LoginScreen extends StatelessWidget {
       child: ButtonTheme(
         minWidth: MediaQuery.of(context).size.width,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                side: BorderSide.none),
-            padding: EdgeInsets.all(18.0),
-            primary: primaryColor,
-          ),
           onPressed: model.busy
               ? null
               : () {
@@ -162,9 +154,7 @@ class LoginScreen extends StatelessWidget {
     final success =
         await model.login(_emailController.text, _passwordController.text);
     if (success) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        return DashboardScreen();
-      }));
+      Navigator.of(context).pushReplacementNamed(RoutePaths.HOME);
     } else {
       showSnackBar(context, model.errorMessage);
     }
@@ -183,12 +173,8 @@ class LoginScreen extends StatelessWidget {
             Text("Don't have an account?"),
             TextButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return SignUpScreen();
-                    },
-                  ),
+                Navigator.of(context).pushNamed(
+                  RoutePaths.REGISTER
                 );
               },
               child: Text("Sign up"),

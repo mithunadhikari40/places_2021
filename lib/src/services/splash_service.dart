@@ -1,3 +1,4 @@
+import 'package:places/src/core/base_request.dart';
 import 'package:places/src/core/constants/app_constants.dart';
 import 'package:places/src/model/user_model.dart';
 import 'package:places/src/services/auth_rx_provider.dart';
@@ -28,6 +29,8 @@ class SplashService {
       /// the user has not logged in yet
       return;
     }
+    baseRequest.setDefaultHeaders({"x-auth-token":token});
+
     authRxProvider.addToken(token);
     authRxProvider.addUser(user);
     _isLoggedIn = true;

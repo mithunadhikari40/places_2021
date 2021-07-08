@@ -44,12 +44,11 @@ class _ProfileScreenState extends State<ProfileScreen>
       floating: true,
       pinned: true,
       forceElevated: innerBoxScrolled,
-      backgroundColor: whiteColor,
       title: Text("Profile", style: Theme.of(context).textTheme.headline6),
       bottom: TabBar(
         controller: _tabController,
         tabs: [
-          Tab(icon: Icon(Icons.person), text: "Profile"),
+          Tab(icon: Icon(Icons.person), text: "Me"),
           Tab(icon: Icon(Icons.location_on_outlined), text: "My Places"),
         ],
         physics: BouncingScrollPhysics(),

@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:places/src/core/base_request.dart';
 import 'package:places/src/core/constants/app_url.dart';
 import 'package:places/src/model/user_model.dart';
 
 class AuthApi {
   Future<String> login(String email, String password) async {
-    Map<String, dynamic> requestBody = {"email": "outlook@gmail.com", "password": "password"};
+    Map<String, dynamic> requestBody = {"email":email, "password": password};
     try {
       var uri = Uri.parse(AppUrl.LOGIN_URL);
-      final response = await post(
+      final response = await baseRequest.post(
         uri,
         body: jsonEncode(requestBody),
-        headers: {"Content-Type": "application/json"},
       );
       final body = response.body;
       print("login response $body");
@@ -28,16 +27,11 @@ class AuthApi {
     }
   }
 
-  Future<UserModel> fetchUserDetail(String token) async {
+  Future<UserModel> fetchUserDetail() async {
     try {
       var uri = Uri.parse(AppUrl.PROFILE_URL);
-      final response = await get(
-        uri,
-        headers: {
-          "Content-Type": "application/json",
-        // "Authorization":"Bearer $token",
-          "x-auth-token":token
-        },
+      final response = await baseRequest.get(
+        uri
       );
       final body = response.body;
       print("me response $body");
@@ -63,10 +57,9 @@ class AuthApi {
     };
     try {
       var uri = Uri.parse(AppUrl.REGISTER_URL);
-      final response = await post(
+      final response = await baseRequest.post(
         uri,
         body: jsonEncode(requestBody),
-        headers: {"Content-Type": "application/json"},
       );
       final body = response.body;
       print("Signup response $body");

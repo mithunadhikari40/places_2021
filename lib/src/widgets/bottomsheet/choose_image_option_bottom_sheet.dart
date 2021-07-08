@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:places/src/widgets/shared/app_colors.dart';
 
 void showChoseImageOptionBottomSheet(BuildContext context,Function(ImageSource source) callback) {
   showModalBottomSheet(
@@ -32,13 +31,7 @@ void showChoseImageOptionBottomSheet(BuildContext context,Function(ImageSource s
                     child: ButtonTheme(
                       minWidth: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide.none),
-                          padding: EdgeInsets.all(18.0),
-                          primary: primaryColor,
-                        ),
+
                         onPressed: () {
                           Navigator.of(context).pop();
                           callback(ImageSource.camera);
@@ -55,13 +48,7 @@ void showChoseImageOptionBottomSheet(BuildContext context,Function(ImageSource s
                     child: ButtonTheme(
                       minWidth: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide.none),
-                          padding: EdgeInsets.all(18.0),
-                          primary: primaryColor,
-                        ),
+
                         onPressed: () {
                           Navigator.of(context).pop();
                           callback(ImageSource.gallery);
