@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:places/src/core/base_widget.dart';
+import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/screens/dashboard/explore_screen.dart';
 import 'package:places/src/screens/dashboard/favorite_screen.dart';
 import 'package:places/src/screens/dashboard/profile_screen.dart';
@@ -55,7 +56,9 @@ class DashboardScreen extends StatelessWidget  {
             size: 40,
             color: blackColor87,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(RoutePaths.ADD_NEW);
+          },
         ),
         SizedBox(
           width: 16,

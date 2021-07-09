@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:places/src/utils/snackbar_helper.dart';
-import 'package:places/src/widgets/input_name.dart';
 import 'dart:math' as Math;
 
-void showChangeNameBottomSheet(BuildContext context,Function(String value) callback) {
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:places/src/widgets/input_name.dart';
+import 'package:places/src/widgets/shared/app_colors.dart';
+
+void showChangeNameBottomSheet(
+    BuildContext context, Function(String value) callback) {
   final TextEditingController controller = TextEditingController();
   showModalBottomSheet(
       context: context,
@@ -26,7 +29,11 @@ void showChangeNameBottomSheet(BuildContext context,Function(String value) callb
             ),
             SizedBox(height: 20),
             Padding(
-              padding:  EdgeInsets.only(bottom: Math.max(0,MediaQuery.of(context).viewInsets.bottom - MediaQuery.of(context).size.height*.1)),
+              padding: EdgeInsets.only(
+                  bottom: Math.max(
+                      0,
+                      MediaQuery.of(context).viewInsets.bottom -
+                          MediaQuery.of(context).size.height * .1)),
               child: InputName(controller: controller),
             ),
             Row(
@@ -39,8 +46,11 @@ void showChangeNameBottomSheet(BuildContext context,Function(String value) callb
                       child: ElevatedButton(
                         onPressed: () {
                           // validation logic, validate the name
-                          if(controller.text.trim().length<4){
-                            showSnackBar(context, "Name must be at least 4 characters long");
+                          if (controller.text.trim().length < 4) {
+                            Fluttertoast.showToast(
+                              msg: "Name must be at least 4 characters long",
+                              toastLength: Toast.LENGTH_LONG
+                            );
                             return;
                           }
                           Navigator.of(context).pop();

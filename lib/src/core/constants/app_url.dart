@@ -8,5 +8,6 @@ class AppUrl{
   static const UPDATE_PROFILE_PIC_URL = "$BASE_URL/auth/updateProfilePic";
   static const UPDATE_COVER_PIC_URL = "$BASE_URL/auth/updateCoverPic";
   static const PLACES_LIST_URL = "$BASE_URL/places/all";
+  static const PLACES_URL = "$BASE_URL/places";
   static const FAVORITE_LIST_URL = "$BASE_URL/favorite";
 }

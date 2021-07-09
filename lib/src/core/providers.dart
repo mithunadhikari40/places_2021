@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:places/src/api/auth_api.dart';
 import 'package:places/src/api/dashboard/explore_api.dart';
 import 'package:places/src/api/dashboard/favorite_api.dart';
+import 'package:places/src/api/dashboard/places_api.dart';
 import 'package:places/src/api/dashboard/profile_api.dart';
 import 'package:places/src/services/auth/auth_service.dart';
 import 'package:places/src/services/auth_rx_provider.dart';
 import 'package:places/src/services/dashboard/dashboard_service.dart';
 import 'package:places/src/services/dashboard/explore_service.dart';
 import 'package:places/src/services/dashboard/favorite_service.dart';
+import 'package:places/src/services/dashboard/places_service.dart';
 import 'package:places/src/services/dashboard/profile_detail_service.dart';
 import 'package:places/src/services/local/cache_provider.dart';
 import 'package:places/src/services/local/db_provider.dart';
@@ -22,6 +24,7 @@ final List<SingleChildWidget> providers = [
 
 final List<SingleChildWidget> independentProviders = [
   Provider.value(value: AuthApi()),
+  Provider.value(value: PlaceApi()),
   Provider.value(value: ExploreApi()),
   Provider.value(value: FavoriteApi()),
   Provider.value(value: DbProvider()),
@@ -76,6 +79,11 @@ final List<SingleChildWidget> dependantProviders = [
     update: (BuildContext context, AuthRxProvider authRxProvider,
         DashboardService? service) {
       return DashboardService(authRxProvider: authRxProvider);
+    },
+  ),ProxyProvider<PlaceApi, PlacesService>(
+    update: (BuildContext context, PlaceApi api,
+        PlacesService? service) {
+      return PlacesService(api: api);
     },
   ),
   ProxyProvider2<ExploreApi, AuthRxProvider, ExploreService>(
