@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/src/core/base_widget.dart';
@@ -9,11 +12,13 @@ import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/dashboard/places_view_model.dart';
 import 'package:places/src/widgets/bottomsheet/choose_image_option_bottom_sheet.dart';
 import 'package:places/src/widgets/input_name.dart';
+import 'package:places/src/widgets/map_input.dart';
 import 'package:provider/provider.dart';
 
 class AddNewPlaceScreen extends StatelessWidget {
   AddNewPlaceScreen({Key? key}) : super(key: key);
   final _nameController = TextEditingController();
+  final _monumentController = TextEditingController();
   final _descriptionController = TextEditingController();
 
   @override
@@ -30,6 +35,84 @@ class AddNewPlaceScreen extends StatelessWidget {
         });
   }
 
+  // Widget _buildChooseFromMap(BuildContext context, PlacesViewModel model) {
+  //   return Container(
+  //     width: MediaQuery
+  //         .of(context)
+  //         .size
+  //         .width,
+  //     margin: EdgeInsets.all(10),
+  //     child: SwitchListTile.adaptive(
+  //         value: true,
+  //         selected: true,
+  //         shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(8.0),
+  //             side: BorderSide()),
+  //         title: Text("Select from Map"),
+  //         onChanged: (val) {
+  //
+  //         }),
+  //   );
+  // }
+
+  Widget _buildChooseFromMap(BuildContext context, PlacesViewModel model) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(border: Border.all()),
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Choose from map"),
+          Platform.isIOS
+              ? CupertinoSwitch(
+                  value: !model.useCurrentLocation,
+                  onChanged: (val) {
+                    model.setLocationMethod(true);
+                  })
+              : Switch(
+                  value: !model.useCurrentLocation,
+                  onChanged: (val) {
+                    model.setLocationMethod(true);
+                  })
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChooseFromCurrentLocation(
+      BuildContext context, PlacesViewModel model) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(border: Border.all()),
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Use current location"),
+          Platform.isIOS
+              ? CupertinoSwitch(
+                  value: model.useCurrentLocation,
+                  onChanged: (val) {
+                    model.setLocationMethod(false);
+                    _chooseLocationFromMap(context, model);
+                    // show a map
+                  })
+              : Switch(
+                  value: model.useCurrentLocation,
+                  onChanged: (val) {
+                    model.setLocationMethod(false);
+                    _chooseLocationFromMap(context, model);
+
+                    //show from map
+                  })
+        ],
+      ),
+    );
+  }
+
   Widget _buildBody(BuildContext context, PlacesViewModel model) {
     return ListView(
       children: [
@@ -40,24 +123,54 @@ class AddNewPlaceScreen extends StatelessWidget {
           icon: Icons.place,
         ),
         InputName(
+          controller: _monumentController,
+          text: "Nearby monument ",
+          hint: "e.g Dharahara",
+          icon: Icons.place,
+        ),
+        InputName(
           controller: _descriptionController,
           text: "Place description",
           hint: "describe this place",
           icon: Icons.message,
           lines: 3,
         ),
+
         _buildInputImage(context, model),
-        SizedBox(
-          height: 12,
-        ),
+        SizedBox(height: 12),
         _buildStaticImage(context, model),
-        SizedBox(
-          height: 12,
+
+        AnimatedCrossFade(
+          duration: const Duration(seconds: 2),
+          secondChild: _buildChooseFromMap(context, model),
+          firstChild: _buildChooseFromCurrentLocation(context, model),
+          crossFadeState: model.useCurrentLocation
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
         ),
-
-
+        //
+        SizedBox(height: 12),
+        _buildSubmitButton(context, model),
+        SizedBox(height: 12),
 
       ],
+    );
+  }
+
+  Widget _buildSubmitButton(BuildContext context, PlacesViewModel model) {
+    return Container(
+      margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+      child: ButtonTheme(
+        minWidth: MediaQuery.of(context).size.width,
+        child: ElevatedButton(
+          onPressed: model.busy
+              ? null
+              : () {
+                  _onSubmit(context, model);
+                },
+          child: model.busy ? CircularProgressIndicator() : Text("Submit"),
+        ),
+      ),
     );
   }
 
@@ -93,9 +206,6 @@ class AddNewPlaceScreen extends StatelessWidget {
     // if no then show a section showing no image selected
     // else show the image
     return InkWell(
-      onTap: (){
-        model.setLocation(LatLng(27.8434, 84.333));
-      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height / 5,
@@ -112,7 +222,18 @@ class AddNewPlaceScreen extends StatelessWidget {
               )
             : Image.network(
                 LocationHelper.generateLocationPreviewImage(model.location!),
-                fit: BoxFit.cover),
+                fit: BoxFit.cover,
+                // loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent? progress) {
+                //   if (progress == null) return child;
+                //   return Center(
+                //     child: CircularProgressIndicator(
+                //       value: progress.expectedTotalBytes != null ?
+                //       progress.cumulativeBytesLoaded / progress.expectedTotalBytes!.toInt()
+                //           : null,
+                //     ),
+                //   );
+                // },
+              ),
       ),
     );
   }
@@ -127,5 +248,74 @@ class AddNewPlaceScreen extends StatelessWidget {
       File file = File(pickedImage.path);
       model.setImage(file.absolute.path);
     });
+  }
+
+  Future<void> _chooseLocationFromMap(
+      BuildContext context, PlacesViewModel model) async {
+    LatLng? chosenLocation = await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (_) {
+            return MapInput(
+                onMapTapped: (loc) {}, currentLocation: model.currentLocation);
+          },
+          fullscreenDialog: true),
+    );
+    if (chosenLocation != null) {
+      model.setLocation(chosenLocation);
+    }
+  }
+
+  void _onSubmit(BuildContext context, PlacesViewModel model) async {
+    bool validData = validateData(context, model);
+    if (!validData) return;
+
+    List<Placemark> placeMarks = await GeocodingPlatform.instance
+        .placemarkFromCoordinates(
+            model.location!.latitude, model.location!.longitude);
+
+    Placemark place = placeMarks.first;
+    String? city = place.locality;
+    String? street = place.street;
+    String address = "${place.locality} + ${place.subLocality} ";
+    if (city == null || street == null) {
+      showSnackBar(context, "Could not fetch the address, please try again");
+      return;
+    }
+    var response = await model.postData(
+        address: address,
+        city: city,
+        description: _descriptionController.text,
+        monument: _monumentController.text,
+        name: _nameController.text,
+        street: street);
+    if (!response.status) {
+      showSnackBar(context, response.message!);
+    } else {
+      showSnackBar(context, "Successfully added a new place");
+    }
+  }
+
+  bool validateData(BuildContext context, PlacesViewModel model) {
+    if (_nameController.text.isEmpty) {
+      showSnackBar(context, "Place Name is required");
+      return false;
+    }
+    if (_monumentController.text.isEmpty) {
+      showSnackBar(context, "Monument is required");
+      return false;
+    }
+    if (_descriptionController.text.isEmpty) {
+      showSnackBar(context, "Description is required");
+      return false;
+    }
+    if (model.imagePath == null) {
+      showSnackBar(context, "Please pick a image first");
+      return false;
+    }
+    if (model.location == null) {
+      showSnackBar(context, "Please select the location.");
+      return false;
+    }
+    return true;
   }
 }

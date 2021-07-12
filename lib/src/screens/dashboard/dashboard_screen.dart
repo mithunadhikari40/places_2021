@@ -178,3 +178,71 @@ class DashboardScreen extends StatelessWidget  {
 
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+late final FirebaseMessaging _messaging;
+
+  @override
+  initState(){
+    super.initState();
+    registerNotification();
+  }
+
+  void registerNotification() async {
+    // 1. Initialize the Firebase app
+
+
+    // 2. Instantiate Firebase Messaging
+    _messaging = FirebaseMessaging.instance;
+
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+    _messaging.getToken();
+
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      // TODO: handle the received notifications
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        // Parse the message received
+        PushNotification notification = PushNotification(
+          title: message.notification?.title,
+          body: message.notification?.body,
+        );
+
+
+      });
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+ */

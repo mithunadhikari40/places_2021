@@ -80,10 +80,10 @@ final List<SingleChildWidget> dependantProviders = [
         DashboardService? service) {
       return DashboardService(authRxProvider: authRxProvider);
     },
-  ),ProxyProvider<PlaceApi, PlacesService>(
-    update: (BuildContext context, PlaceApi api,
+  ),ProxyProvider2<PlaceApi, AuthRxProvider, PlacesService>(
+    update: (BuildContext context, PlaceApi api, AuthRxProvider authRxProvider,
         PlacesService? service) {
-      return PlacesService(api: api);
+      return PlacesService(api: api,authRxProvider: authRxProvider);
     },
   ),
   ProxyProvider2<ExploreApi, AuthRxProvider, ExploreService>(

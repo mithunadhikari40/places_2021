@@ -1,10 +1,15 @@
+import 'package:location/location.dart';
 import 'package:places/src/api/dashboard/places_api.dart';
 import 'package:places/src/model/network_response_model.dart';
+import 'package:places/src/services/auth_rx_provider.dart';
 
 class PlacesService {
   final PlaceApi api;
+  final AuthRxProvider authRxProvider;
 
-  PlacesService({required this.api});
+  PlacesService({required this.api , required this.authRxProvider});
+
+  LocationData get currentLocation => authRxProvider.getLocation!;
 
   Future<NetworkResponseModel> addNewPlace(
       {required String name,
