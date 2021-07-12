@@ -42,7 +42,7 @@ class FavoriteService {
   }
 
   Future<NetworkResponseModel> isFavorite(String id) async {
-    final response = await api.addOrRemoveFromFavorite(id);
+    final response = await api.isFavorite(id);
     return response;
   }
 
