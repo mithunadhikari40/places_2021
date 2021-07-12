@@ -26,6 +26,10 @@ class PlacesViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setInitialLocation(){
+    _location = currentLocation;
+  }
+
   bool _useCurrentLocation = true;
 
   bool get useCurrentLocation => _useCurrentLocation;

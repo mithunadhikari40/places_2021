@@ -35,4 +35,15 @@ class FavoriteService {
       _places!.data = list;
     }
   }
+
+  Future<NetworkResponseModel> addOrRemoveFromFavorite(String id) async {
+    final response = await api.addOrRemoveFromFavorite(id);
+   return response;
+  }
+
+  Future<NetworkResponseModel> isFavorite(String id) async {
+    final response = await api.addOrRemoveFromFavorite(id);
+    return response;
+  }
+
 }

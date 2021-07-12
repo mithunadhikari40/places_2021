@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:places/src/core/base_widget.dart';
+import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/model/dashboard/place_model.dart';
 import 'package:places/src/viewmodels/dashboard/explore_view_model.dart';
 import 'package:places/src/widgets/error_view.dart';
@@ -38,7 +39,16 @@ class ExploreScreen extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 12),
       itemBuilder: (BuildContext context, int index) {
         final PlaceModel place = model.places.data[index] as PlaceModel;
-        return PlaceItem(place: place,location:model.currentLocation);
+        return InkWell(
+          onTap: (){
+            Navigator.of(context).pushNamed(RoutePaths.VIEW_DETAIL,arguments: place);
+          },
+          child: PlaceItem(
+            place: place,
+            location: model.currentLocation,
+
+          ),
+        );
       },
     );
   }

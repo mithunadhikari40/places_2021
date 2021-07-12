@@ -25,6 +25,7 @@ class AddNewPlaceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget<PlacesViewModel>(
         model: PlacesViewModel(service: Provider.of(context)),
+        onModelReady: _onModelReady,
         builder: (context, PlacesViewModel model, Widget? child) {
           return Scaffold(
             appBar: AppBar(
@@ -292,6 +293,7 @@ class AddNewPlaceScreen extends StatelessWidget {
       showSnackBar(context, response.message!);
     } else {
       showSnackBar(context, "Successfully added a new place");
+      Navigator.of(context).pop();
     }
   }
 
@@ -317,5 +319,9 @@ class AddNewPlaceScreen extends StatelessWidget {
       return false;
     }
     return true;
+  }
+
+ void _onModelReady(PlacesViewModel model) {
+    model.setInitialLocation();
   }
 }

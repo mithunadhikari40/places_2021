@@ -40,6 +40,10 @@ dependencies:
   geocoding: ^2.0.0
   geolocator: ^7.2.0+1
 
+  #setting up the locator
+  get_it: any
+
+
   location: ^4.3.0
 
   path_provider: ^2.0.2
