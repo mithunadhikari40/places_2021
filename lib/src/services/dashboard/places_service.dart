@@ -9,7 +9,8 @@ class PlacesService {
 
   PlacesService({required this.api , required this.authRxProvider});
 
-  LocationData get currentLocation => authRxProvider.getLocation!;
+  LocationData get currentLocation => authRxProvider.getLocation ?? LocationData.fromMap(
+      {"latitude":27.8324,"longitude":27.1232});
 
   Future<NetworkResponseModel> addNewPlace(
       {required String name,

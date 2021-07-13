@@ -64,6 +64,7 @@ class DbProvider {
 
   Future<int> insertUser(UserModel user) async {
     if (_db == null) await _init();
+    await _db!.delete(USER_TABLE);
     return _db!.insert(USER_TABLE, user.toDb());
   }
 

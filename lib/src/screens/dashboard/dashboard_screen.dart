@@ -1,11 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:location/location.dart';
 import 'package:places/src/core/base_widget.dart';
 import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/screens/dashboard/explore_screen.dart';
 import 'package:places/src/screens/dashboard/favorite_screen.dart';
 import 'package:places/src/screens/dashboard/profile_screen.dart';
+import 'package:places/src/utils/ad_helper.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/dashboard/dashboard_view_model.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
@@ -15,6 +19,11 @@ class DashboardScreen extends StatelessWidget  {
   static const screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  late final FirebaseMessaging _firebaseMessaging;
+  late BannerAd _ad;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +183,122 @@ class DashboardScreen extends StatelessWidget  {
    _locationData = await location.getLocation();
    model.setLocation(_locationData);
 
+   registerNotification(model);
+   initializeAd(model);
+
+
+
+
 
 
   }
+
+  void registerNotification(DashboardViewModel model)  async{
+    _firebaseMessaging = FirebaseMessaging.instance;
+
+    NotificationSettings granted = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      provisional: true
+    );
+    if(granted.authorizationStatus == AuthorizationStatus.authorized){
+      /// notification permission granted
+      FirebaseMessaging.onMessage.listen((event) {
+        print("notificatin data are ${event.data}");
+       // String title =  event.data["title"];
+       // String body =  event.data["body"];
+       ///// this is where we handle notification
+      });
+      _firebaseMessaging.getToken().then((token) {
+        if(token != null){
+          model.updateToken(token);
+        }
+      });
+
+    }else{
+      // show some error,
+
+    }
+
+  }
+
+    Future<InitializationStatus> _initGoogleMobileAds() {
+      // TODO: Initialize Google Mobile Ads SDK
+      return MobileAds.instance.initialize();
+  }
+
+  void initializeAd(DashboardViewModel model) {
+    _ad = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
+
+    // TODO: Load an ad
+    _ad.load();
+  }
+}
+/*
+
+late final FirebaseMessaging _messaging;
+
+
+
+void registerNotification(DashboardViewModel model) async {
+  // 1. Initialize the Firebase app
+
+
+  // 2. Instantiate Firebase Messaging
+  _messaging = FirebaseMessaging.instance;
+
+
+  // 3. On iOS, this helps to take the user permissions
+  NotificationSettings settings = await _messaging.requestPermission(
+    alert: true,
+    badge: true,
+    provisional: false,
+    sound: true,
+  );
+
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+    // TODO: handle the received notifications
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // Parse the message received
+      PushNotification notification = PushNotification(
+        title: message.notification!.title!,
+        body: message.notification!.body!,
+      );
+
+
+    });
+    FirebaseMessaging.instance.getToken().then((token) {
+      if(token != null)
+        model.updateToken(token);
+    });
+  } else {
+    print('User declined or has not accepted permission');
+  }
+}
+class PushNotification{
+  final String title;
+  final String body;
+
+  PushNotification({required this.title,  required this.body});
 }
 
 
@@ -201,48 +323,5 @@ class DashboardScreen extends StatelessWidget  {
 
 
 
-/*
-late final FirebaseMessaging _messaging;
 
-  @override
-  initState(){
-    super.initState();
-    registerNotification();
-  }
-
-  void registerNotification() async {
-    // 1. Initialize the Firebase app
-
-
-    // 2. Instantiate Firebase Messaging
-    _messaging = FirebaseMessaging.instance;
-
-    // 3. On iOS, this helps to take the user permissions
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      provisional: false,
-      sound: true,
-    );
-    _messaging.getToken();
-
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-      // TODO: handle the received notifications
-
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        // Parse the message received
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-
-      });
-    } else {
-      print('User declined or has not accepted permission');
-    }
-  }
-
- */
+*/

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/core/locator.dart';
@@ -8,8 +9,8 @@ import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   setupLocator();
   runApp(App());
 }

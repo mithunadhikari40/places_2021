@@ -25,6 +25,23 @@ class ProfileApi {
           status: false, message: "$e".replaceAll("Exception:", ""));
     }
   }
+  Future<NetworkResponseModel> updateToken(String token) async {
+    try {
+      final uri = Uri.parse(AppUrl.UPDATE_TOKEN_URL);
+      final response = await baseRequest.put(
+        uri,
+        body: jsonEncode({"token": token}),
+      );
+      final body = jsonDecode(response.body);
+      print("update token response $body");
+      final user = UserModel.fromJson(body["data"]);
+      return NetworkResponseModel(status: true, data: user);
+    } catch (e) {
+      print("The update token  exception $e");
+      return NetworkResponseModel(
+          status: false, message: "$e".replaceAll("Exception:", ""));
+    }
+  }
 
   Future<NetworkResponseModel> updatePassword(
       String password) async {

@@ -12,8 +12,9 @@ import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(text: "outlook@gmail.com");
+
+  final TextEditingController _passwordController = TextEditingController(text: "Nepal@123");
 
   @override
   Widget build(BuildContext context) {

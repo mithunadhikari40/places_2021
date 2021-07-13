@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:places/src/screens/dashboard/my_places.dart';
 import 'package:places/src/screens/dashboard/profile_detail.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 
@@ -34,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       controller: _tabController,
       children: [
         ProfileDetail(),
-        Text("This is profile page"),
+        MyPlacesScreen(),
       ],
     );
   }

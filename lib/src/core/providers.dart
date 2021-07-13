@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:places/src/api/auth_api.dart';
 import 'package:places/src/api/dashboard/explore_api.dart';
 import 'package:places/src/api/dashboard/favorite_api.dart';
+import 'package:places/src/api/dashboard/my_places_api.dart';
 import 'package:places/src/api/dashboard/places_api.dart';
 import 'package:places/src/api/dashboard/profile_api.dart';
 import 'package:places/src/services/auth/auth_service.dart';
@@ -9,6 +10,7 @@ import 'package:places/src/services/auth_rx_provider.dart';
 import 'package:places/src/services/dashboard/dashboard_service.dart';
 import 'package:places/src/services/dashboard/explore_service.dart';
 import 'package:places/src/services/dashboard/favorite_service.dart';
+import 'package:places/src/services/dashboard/my_place_service.dart';
 import 'package:places/src/services/dashboard/places_service.dart';
 import 'package:places/src/services/dashboard/profile_detail_service.dart';
 import 'package:places/src/services/local/cache_provider.dart';
@@ -24,6 +26,7 @@ final List<SingleChildWidget> providers = [
 
 final List<SingleChildWidget> independentProviders = [
   Provider.value(value: AuthApi()),
+  Provider.value(value: MyPlacesApi()),
   Provider.value(value: PlaceApi()),
   Provider.value(value: ExploreApi()),
   Provider.value(value: FavoriteApi()),
@@ -75,15 +78,16 @@ final List<SingleChildWidget> dependantProviders = [
           dbProvider: dbProvider);
     },
   ),
-  ProxyProvider<AuthRxProvider, DashboardService>(
+  ProxyProvider2<AuthRxProvider, ProfileApi, DashboardService>(
     update: (BuildContext context, AuthRxProvider authRxProvider,
-        DashboardService? service) {
-      return DashboardService(authRxProvider: authRxProvider);
+        ProfileApi api, DashboardService? service) {
+      return DashboardService(authRxProvider: authRxProvider, api: api);
     },
-  ),ProxyProvider2<PlaceApi, AuthRxProvider, PlacesService>(
+  ),
+  ProxyProvider2<PlaceApi, AuthRxProvider, PlacesService>(
     update: (BuildContext context, PlaceApi api, AuthRxProvider authRxProvider,
         PlacesService? service) {
-      return PlacesService(api: api,authRxProvider: authRxProvider);
+      return PlacesService(api: api, authRxProvider: authRxProvider);
     },
   ),
   ProxyProvider2<ExploreApi, AuthRxProvider, ExploreService>(
@@ -96,6 +100,12 @@ final List<SingleChildWidget> dependantProviders = [
     update: (BuildContext context, FavoriteApi api,
         AuthRxProvider authRxProvider, FavoriteService? service) {
       return FavoriteService(api: api, authRxProvider: authRxProvider);
+    },
+  ),
+  ProxyProvider2<MyPlacesApi, AuthRxProvider, MyPlacesService>(
+    update: (BuildContext context, MyPlacesApi api,
+        AuthRxProvider authRxProvider, MyPlacesService? service) {
+      return MyPlacesService(api: api, authRxProvider: authRxProvider);
     },
   ),
 ];

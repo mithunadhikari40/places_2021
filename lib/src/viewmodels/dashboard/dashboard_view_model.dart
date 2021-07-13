@@ -23,4 +23,8 @@ class DashboardViewModel extends BaseViewModel {
   void setLocation(LocationData locationData){
     service.setLocation(locationData);
   }
+
+  void updateToken(String token) {
+    service.updateToken(token);
+  }
 }

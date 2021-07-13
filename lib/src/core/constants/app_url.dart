@@ -4,6 +4,7 @@ class AppUrl{
   static const PROFILE_URL = "$BASE_URL/users/me";
   static const REGISTER_URL = "$BASE_URL/auth/register";
   static const UPDATE_NAME_URL = "$BASE_URL/auth/updateName";
+  static const UPDATE_TOKEN_URL = "$BASE_URL/auth/updateToken";
   static const UPDATE_PASSWORD_URL = "$BASE_URL/auth/updatePassword";
   static const UPDATE_PROFILE_PIC_URL = "$BASE_URL/auth/updateProfilePic";
   static const UPDATE_COVER_PIC_URL = "$BASE_URL/auth/updateCoverPic";

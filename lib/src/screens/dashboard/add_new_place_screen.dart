@@ -257,7 +257,7 @@ class AddNewPlaceScreen extends StatelessWidget {
       MaterialPageRoute(
           builder: (_) {
             return MapInput(
-                onMapTapped: (loc) {}, currentLocation: model.currentLocation);
+                onMapTapped: (loc) {}, isView:false, currentLocation: model.currentLocation);
           },
           fullscreenDialog: true),
     );

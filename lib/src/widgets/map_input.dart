@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapInput extends StatefulWidget {
-  final Function(LatLng location) onMapTapped;
+  final Function(LatLng location)? onMapTapped;
   final LatLng currentLocation;
-  const MapInput({Key? key, required this.onMapTapped, required this.currentLocation}) : super(key: key);
+  final bool isView;
+  const MapInput({Key? key, this.isView = true, this.onMapTapped, required this.currentLocation}) : super(key: key);
 
   @override
   _MapInputState createState() => _MapInputState();
@@ -16,9 +17,9 @@ class _MapInputState extends State<MapInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Choose from Map"),
+        title:widget.isView? Text("View on Map"): Text("Choose from Map"),
         actions: [
-          IconButton(onPressed: (){
+          widget.isView? Container(): IconButton(onPressed: (){
             Navigator.of(context).pop(_currentLocation);
           }, icon: Icon(Icons.check_circle_outline))
         ],
