@@ -272,10 +272,17 @@ class AddNewPlaceScreen extends StatelessWidget {
   void _onSubmit(BuildContext context, PlacesViewModel model) async {
     bool validData = validateData(context, model);
     if (!validData) return;
+    List<Placemark> placeMarks = [];
+    try{
+       placeMarks = await GeocodingPlatform.instance
+          .placemarkFromCoordinates(
+          model.location!.latitude, model.location!.longitude);
 
-    List<Placemark> placeMarks = await GeocodingPlatform.instance
-        .placemarkFromCoordinates(
-            model.location!.latitude, model.location!.longitude);
+    }catch(e){
+      showSnackBar(context, "Could not fetch address from the co-ordinates supplied, please try again");
+      return;
+
+    }
 
     Placemark place = placeMarks.first;
     String? city = place.locality;

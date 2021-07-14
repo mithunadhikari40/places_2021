@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:places/src/widgets/input_name.dart';
-import 'package:places/src/widgets/shared/app_colors.dart';
 
 void showChangeNameBottomSheet(
     BuildContext context, Function(String value) callback) {

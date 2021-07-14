@@ -1,5 +1,4 @@
 import 'package:location/location.dart';
-import 'package:places/src/api/dashboard/favorite_api.dart';
 import 'package:places/src/api/dashboard/my_places_api.dart';
 import 'package:places/src/model/dashboard/place_model.dart';
 import 'package:places/src/model/network_response_model.dart';
@@ -36,9 +35,4 @@ class MyPlacesService {
       _places!.data = list;
     }
   }
-
-
-
-
-
 }

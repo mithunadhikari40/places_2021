@@ -4,7 +4,7 @@ const Color backgroundColor = Color.fromARGB(255, 255, 241, 159);
 const Color commentColor = Color.fromARGB(255, 255, 246, 196);
 const Color blackColor87 = Colors.black87;
 const Color blackColor54 = Colors.black54;
-// const Color blackColor = Colors.black;
+const Color blackColor = Colors.black;
 const Color greyColor = Colors.grey;
 const Color greenColor = Colors.green;
 const Color redColor = Colors.red;
@@ -24,6 +24,7 @@ const Color deepOrangeColor = Colors.deepOrange;
 const Color purpleColor = Colors.purple;
 
 const primaryColor = Color(0xff104d88);
+const cyanColor = Colors.cyan;
 const accentColor = Color(0xfff49f1c);
 Color dimmedWhiteColor = Colors.grey[100]!;
 Color dimmedGreyColor = Colors.grey[300]!;

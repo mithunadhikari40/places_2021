@@ -20,7 +20,10 @@ class PlaceItem extends StatelessWidget {
           child: Column(
             children: [
               ClipRRect(
-                child: Image.network(getImage(place.image!)),
+                child: Hero(
+                  child: Image.network(getImage(place.image!)),
+                  tag: Key(place.sId!),
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               SizedBox(height: 8),

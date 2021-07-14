@@ -92,10 +92,13 @@ class PlaceDetailView extends StatelessWidget {
       flexibleSpace: Stack(
         children: [
           FlexibleSpaceBar(
-            background: Image.network(
-              getImage(place.image!),
-              height: MediaQuery.of(context).size.height / 3,
-              fit: BoxFit.cover,
+            background: Hero(
+              tag: Key(place.sId!),
+              child: Image.network(
+                getImage(place.image!),
+                height: MediaQuery.of(context).size.height / 3,
+                fit: BoxFit.cover,
+              ),
             ),
             collapseMode: CollapseMode.pin,
             title: Text("${place.name}"),
@@ -121,13 +124,13 @@ class PlaceDetailView extends StatelessWidget {
         minWidth: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: () {
-           Navigator.of(context).push( MaterialPageRoute(
-               builder: (_) {
-                 return MapInput(
-                     currentLocation:
-                     LatLng(place.latitude!, place.longitude!));
-               },
-               fullscreenDialog: true));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) {
+                  return MapInput(
+                      currentLocation:
+                          LatLng(place.latitude!, place.longitude!));
+                },
+                fullscreenDialog: true));
           },
           child: Text("View on Map"),
         ),

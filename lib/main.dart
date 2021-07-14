@@ -5,12 +5,14 @@ import 'package:places/src/core/locator.dart';
 import 'package:places/src/core/providers.dart';
 import 'package:places/src/core/router.dart';
 import 'package:places/src/services/navigation_service.dart';
+import 'package:places/src/services/theme_service.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   setupLocator();
   runApp(App());
 }
@@ -20,48 +22,81 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
-      child: MaterialApp(
-        title: "Places",
-        navigatorKey: locator<NavigationService>().navigatorKey,
-        theme: ThemeData(
-          primaryColor: whiteColor,
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                side: BorderSide.none),
-            padding: EdgeInsets.all(18.0),
-            primary: primaryColor,
-          )),
-          // textTheme: Theme.of(context).textTheme.apply(
-          //   bodyColor: primaryColor,
-          //   displayColor: primaryColor,
-          // ),
-          // primaryTextTheme:Theme.of(context).textTheme.apply(
-          //   bodyColor: primaryColor,
-          //   displayColor: primaryColor,
-          // ) ,
-          buttonColor: primaryColor,
-          textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(primary: primaryColor)),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(primary: primaryColor)),
-          buttonTheme: ButtonThemeData(
-            buttonColor: primaryColor,
-          ),
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: primaryColor,
-          ),
-          iconTheme: Theme.of(context).iconTheme.copyWith(color: primaryColor),
-          primaryIconTheme:
-              Theme.of(context).iconTheme.copyWith(color: primaryColor),
-        ),
-        darkTheme: ThemeData(),
-
-        initialRoute: RoutePaths.SPLASH,
-        onGenerateRoute: Router.onGenerateRoute,
-
-      ),
+      child: StreamBuilder(
+          stream: themeService.themeStream,
+          builder: (context, AsyncSnapshot<bool> snapshot) {
+            bool _dark = snapshot.hasData && snapshot.data!;
+            if (snapshot.hasData) {
+              _dark = snapshot.data!;
+            }
+            return MaterialApp(
+              title: "Places",
+              navigatorKey: locator<NavigationService>().navigatorKey,
+              themeMode: _dark ? ThemeMode.dark : ThemeMode.light,
+              theme: ThemeData(
+                primaryColor: whiteColor,
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      side: BorderSide.none),
+                  padding: EdgeInsets.all(18.0),
+                  primary: primaryColor,
+                )),
+                textTheme: Theme.of(context).textTheme.apply(
+                      bodyColor: blackColor,
+                      displayColor: blackColor,
+                    ),
+                buttonColor: primaryColor,
+                textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(primary: primaryColor)),
+                outlinedButtonTheme: OutlinedButtonThemeData(
+                    style: OutlinedButton.styleFrom(primary: primaryColor)),
+                buttonTheme: ButtonThemeData(
+                  buttonColor: primaryColor,
+                ),
+                floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: primaryColor,
+                ),
+                iconTheme:
+                    Theme.of(context).iconTheme.copyWith(color: primaryColor),
+                primaryIconTheme:
+                    Theme.of(context).iconTheme.copyWith(color: primaryColor),
+              ),
+              darkTheme: ThemeData(
+                primaryColor: whiteColor,
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      side: BorderSide.none),
+                  padding: EdgeInsets.all(18.0),
+                  primary: cyanColor,
+                )),
+                textTheme: Theme.of(context).textTheme.apply(
+                      bodyColor: blackColor,
+                      displayColor: blackColor,
+                    ),
+                buttonColor: primaryColor,
+                textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(primary: primaryColor)),
+                outlinedButtonTheme: OutlinedButtonThemeData(
+                    style: OutlinedButton.styleFrom(primary: primaryColor)),
+                buttonTheme: ButtonThemeData(
+                  buttonColor: primaryColor,
+                ),
+                floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: primaryColor,
+                ),
+                iconTheme:
+                    Theme.of(context).iconTheme.copyWith(color: primaryColor),
+                primaryIconTheme:
+                    Theme.of(context).iconTheme.copyWith(color: primaryColor),
+              ),
+              initialRoute: RoutePaths.SPLASH,
+              onGenerateRoute: Router.onGenerateRoute,
+            );
+          }),
     );
   }
 }

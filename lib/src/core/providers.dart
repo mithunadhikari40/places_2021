@@ -42,10 +42,11 @@ final List<SingleChildWidget> dependantProviders = [
         CacheProvider cacheProvider,
         AuthRxProvider authRxProvider,
         SplashService? service) {
-      return  service ??  SplashService(
-          authRxProvider: authRxProvider,
-          cacheProvider: cacheProvider,
-          dbProvider: dbProvider);
+      return service ??
+          SplashService(
+              authRxProvider: authRxProvider,
+              cacheProvider: cacheProvider,
+              dbProvider: dbProvider);
     },
   ),
   ProxyProvider4<DbProvider, CacheProvider, AuthRxProvider, ProfileApi,
@@ -56,11 +57,12 @@ final List<SingleChildWidget> dependantProviders = [
         AuthRxProvider authRxProvider,
         ProfileApi api,
         ProfileDetailService? service) {
-      return service ?? ProfileDetailService(
-          authRxProvider: authRxProvider,
-          api: api,
-          cacheProvider: cacheProvider,
-          dbProvider: dbProvider);
+      return service ??
+          ProfileDetailService(
+              authRxProvider: authRxProvider,
+              api: api,
+              cacheProvider: cacheProvider,
+              dbProvider: dbProvider);
     },
   ),
   ProxyProvider4<AuthApi, DbProvider, CacheProvider, AuthRxProvider,
@@ -71,17 +73,20 @@ final List<SingleChildWidget> dependantProviders = [
         CacheProvider cacheProvider,
         AuthRxProvider authRxProvider,
         AuthService? service) {
-      return service ?? AuthService(
-          api: api,
-          authRxProvider: authRxProvider,
-          cacheProvider: cacheProvider,
-          dbProvider: dbProvider);
+      return service ??
+          AuthService(
+              api: api,
+              authRxProvider: authRxProvider,
+              cacheProvider: cacheProvider,
+              dbProvider: dbProvider);
     },
   ),
-  ProxyProvider2<AuthRxProvider, ProfileApi, DashboardService>(
+  ProxyProvider4<AuthRxProvider, ProfileApi, CacheProvider, DbProvider,DashboardService>(
     update: (BuildContext context, AuthRxProvider authRxProvider,
-        ProfileApi api, DashboardService? service) {
-      return service ?? DashboardService(authRxProvider: authRxProvider, api: api);
+        ProfileApi api, CacheProvider cache, DbProvider dbProvider, DashboardService? service) {
+      return service ??
+          DashboardService(
+              authRxProvider: authRxProvider, api: api, cache: cache, dbProvider: dbProvider);
     },
   ),
   ProxyProvider2<PlaceApi, AuthRxProvider, PlacesService>(
@@ -93,19 +98,22 @@ final List<SingleChildWidget> dependantProviders = [
   ProxyProvider2<ExploreApi, AuthRxProvider, ExploreService>(
     update: (BuildContext context, ExploreApi api,
         AuthRxProvider authRxProvider, ExploreService? service) {
-      return service ?? ExploreService(api: api, authRxProvider: authRxProvider);
+      return service ??
+          ExploreService(api: api, authRxProvider: authRxProvider);
     },
   ),
   ProxyProvider2<FavoriteApi, AuthRxProvider, FavoriteService>(
     update: (BuildContext context, FavoriteApi api,
         AuthRxProvider authRxProvider, FavoriteService? service) {
-      return service ?? FavoriteService(api: api, authRxProvider: authRxProvider);
+      return service ??
+          FavoriteService(api: api, authRxProvider: authRxProvider);
     },
   ),
   ProxyProvider2<MyPlacesApi, AuthRxProvider, MyPlacesService>(
     update: (BuildContext context, MyPlacesApi api,
         AuthRxProvider authRxProvider, MyPlacesService? service) {
-      return service ?? MyPlacesService(api: api, authRxProvider: authRxProvider);
+      return service ??
+          MyPlacesService(api: api, authRxProvider: authRxProvider);
     },
   ),
 ];

@@ -6,7 +6,9 @@ import 'package:places/src/screens/auth/signup_screen.dart';
 import 'package:places/src/screens/dashboard/add_new_place_screen.dart';
 import 'package:places/src/screens/dashboard/dashboard_screen.dart';
 import 'package:places/src/screens/dashboard/place_detail_view.dart';
+import 'package:places/src/screens/dashboard/privacy_policy_screen.dart';
 import 'package:places/src/screens/dashboard/splash_screen.dart';
+import 'package:places/src/screens/dashboard/terms_and_condition_screen.dart';
 
 class Router {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -27,6 +29,12 @@ class Router {
             builder: (context) => PlaceDetailView(
                   place: place,
                 ));
+
+      case RoutePaths.PRIVACY_POLICY:
+        return MaterialPageRoute(builder: (context) => PrivacyPolicyScreen());
+      case RoutePaths.TERMS_CONDITION:
+        return MaterialPageRoute(
+            builder: (context) => TermsAndConditionsScreen());
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(

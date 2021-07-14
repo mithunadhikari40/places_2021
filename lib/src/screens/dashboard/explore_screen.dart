@@ -40,27 +40,50 @@ class ExploreScreen extends StatelessWidget {
           messages: model.places.message!,
           callback: () async => await model.initialize());
     }
-    return ListView.builder(
-      itemCount: model.places.data.length + (model.places.data.length)~/2  ,
-      padding: EdgeInsets.only(bottom: 12),
-      itemBuilder: (BuildContext context, int index) {
+    return _buildPlaceList(model);
+  }
 
-        if(index %3 ==0 && index != 0){
-          return _buildAdView(model);
-        }
+  StreamBuilder<List<PlaceModel>> _buildPlaceList(ExploreViewModel model) {
+    return StreamBuilder(
+        stream: model.placeStream,
+        builder: (context, AsyncSnapshot<List<PlaceModel>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text("Nothing found."),
+            );
+          }
+          print(
+              "snapshot data is this one ${snapshot.data!.map((e) => e.toJson())}");
 
-        final PlaceModel place = model.places.data[index - (index~/2)] as PlaceModel;
-        return InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .pushNamed(RoutePaths.VIEW_DETAIL, arguments: place);
-          },
-          child: PlaceItem(
-            place: place,
-            location: model.currentLocation,
-          ),
-        );
+          return RefreshIndicator(
+            onRefresh: () async => await model.initialize(),
+            child: ListView.builder(
+              itemCount: snapshot.data!.length + (snapshot.data!.length) ~/ 2,
+              padding: EdgeInsets.only(bottom: 12),
+              itemBuilder: (BuildContext context, int index) {
+                if ((index + 1) % 3 == 0 && index != 0) {
+                  return _buildAdView(model);
+                }
+
+                return _buildSinglePlaceItem(snapshot, index, context, model);
+              },
+            ),
+          );
+        });
+  }
+
+  InkWell _buildSinglePlaceItem(AsyncSnapshot<List<PlaceModel>> snapshot,
+      int index, BuildContext context, ExploreViewModel model) {
+    final PlaceModel place = snapshot.data![index - (index ~/ 3)];
+    return InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(RoutePaths.VIEW_DETAIL, arguments: place);
       },
+      child: PlaceItem(
+        place: place,
+        location: model.currentLocation,
+      ),
     );
   }
 
@@ -69,7 +92,7 @@ class ExploreScreen extends StatelessWidget {
   }
 
   Widget _buildAdView(ExploreViewModel model) {
-   final _ad = BannerAd(
+    final _ad = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       size: AdSize.banner,
       request: AdRequest(),
@@ -86,7 +109,7 @@ class ExploreScreen extends StatelessWidget {
       ),
     );
 
-     // _ad.load();
+    // _ad.load();
 
     return FutureBuilder(
         future: _ad.load(),

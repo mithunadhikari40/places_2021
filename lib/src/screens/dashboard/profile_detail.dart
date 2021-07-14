@@ -60,6 +60,7 @@ class ProfileDetail extends StatelessWidget {
 
   Widget _buildChangeEmailSection(BuildContext context) {
     return ListTile(
+
       title: Text(
         "Change Email",
         style: Theme.of(context).textTheme.subtitle2,
@@ -103,7 +104,9 @@ class ProfileDetail extends StatelessWidget {
         style: Theme.of(context).textTheme.subtitle2,
       ),
       leading: Icon(Icons.privacy_tip_outlined),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(RoutePaths.PRIVACY_POLICY);
+      },
     );
   }
 
@@ -114,7 +117,10 @@ class ProfileDetail extends StatelessWidget {
         style: Theme.of(context).textTheme.subtitle2,
       ),
       leading: Icon(Icons.file_copy_sharp),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(RoutePaths.TERMS_CONDITION);
+
+      },
     );
   }
 
@@ -131,8 +137,10 @@ class ProfileDetail extends StatelessWidget {
             applicationVersion: "1.0.0",
             applicationName: "Places",
             applicationLegalese: "All right reserved @2021, XYZ Pvt. Ltd.",
-            applicationIcon: FlutterLogo(
-              size: 100,
+            applicationIcon: Image.asset(
+              "assets/images/logo.png",
+              width: 100,
+              height: 100,
             ));
       },
     );

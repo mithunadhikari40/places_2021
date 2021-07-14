@@ -19,14 +19,11 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      child: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
-          return [_buildHeader(context, innerBoxScrolled)];
-        },
-        body: _buildTabBarView(context),
-      ),
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
+        return [_buildHeader(context, innerBoxScrolled)];
+      },
+      body: _buildTabBarView(context),
     );
   }
 

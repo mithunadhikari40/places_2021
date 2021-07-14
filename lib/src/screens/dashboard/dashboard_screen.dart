@@ -1,24 +1,26 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:location/location.dart';
 import 'package:places/src/core/base_widget.dart';
 import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/screens/dashboard/explore_screen.dart';
 import 'package:places/src/screens/dashboard/favorite_screen.dart';
 import 'package:places/src/screens/dashboard/profile_screen.dart';
-import 'package:places/src/utils/ad_helper.dart';
+import 'package:places/src/services/theme_service.dart';
+import 'package:places/src/utils/show_overlay_loading_indicator.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/dashboard/dashboard_view_model.dart';
+import 'package:places/src/widgets/bottomsheet/log_out_bottom_sheet.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatelessWidget {
-  static const  screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
+  static const screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late final FirebaseMessaging _firebaseMessaging;
+
   // late final BannerAd _ad;
 
   @override
@@ -43,9 +45,7 @@ class DashboardScreen extends StatelessWidget {
       title: Text(model.getAppbarTitle()),
       leading: IconButton(
         icon: Icon(
-          Icons.menu,
-          color: blackColor87,
-        ),
+          Icons.menu,),
         onPressed: () {
           bool drawerOpen = _scaffoldKey.currentState!.isDrawerOpen;
           if (!drawerOpen) {
@@ -54,11 +54,10 @@ class DashboardScreen extends StatelessWidget {
         },
       ),
       actions: [
-        IconButton(
+        model.currentIndex != 0 ? Container() : IconButton(
           icon: Icon(
             Icons.add,
             size: 40,
-            color: blackColor87,
           ),
           onPressed: () {
             Navigator.of(context).pushNamed(RoutePaths.ADD_NEW);
@@ -66,7 +65,18 @@ class DashboardScreen extends StatelessWidget {
         ),
         SizedBox(
           width: 16,
-        )
+        ),
+        IconButton(
+          icon: Icon(
+            themeService.getTheme ? Icons.dark_mode : Icons.light_mode,
+          ),
+          onPressed: () {
+            model.changeTheme();
+          },
+        ),
+        SizedBox(
+          width: 16,
+        ),
       ],
     );
   }
@@ -75,8 +85,8 @@ class DashboardScreen extends StatelessWidget {
     return screens[model.currentIndex];
   }
 
-  Widget _buildBottomNavigationBar(
-      BuildContext context, DashboardViewModel model) {
+  Widget _buildBottomNavigationBar(BuildContext context,
+      DashboardViewModel model) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(icon: Icon(Icons.explore), label: "Explore"),
@@ -97,10 +107,10 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavigationDrawer(
-      DashboardViewModel model, BuildContext context) {
+  Widget _buildNavigationDrawer(DashboardViewModel model,
+      BuildContext context) {
     return Container(
-      width: 200,
+      width: MediaQuery.of(context).size.width/1.6,
       color: whiteColor,
       child: Drawer(
         child: Column(
@@ -139,10 +149,17 @@ class DashboardScreen extends StatelessWidget {
             ListTile(
               title: Text("About us"),
               trailing: Icon(Icons.info),
+              onTap: () => _showAboutUs(context),
             ),
             ListTile(
               title: Text("Log out"),
               trailing: Icon(Icons.exit_to_app),
+              onTap: () async {
+                showLogoutBottomSheet(context, () {
+                  _logout(context, model);
+                });
+                //
+              },
             ),
           ],
         ),
@@ -150,8 +167,8 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _onModelReady(
-      DashboardViewModel model, BuildContext context) async {
+  Future<void> _onModelReady(DashboardViewModel model,
+      BuildContext context) async {
     registerNotification(model);
 
     Location location = Location();
@@ -213,84 +230,38 @@ class DashboardScreen extends StatelessWidget {
     }
   }
 
-  Future<InitializationStatus> _initGoogleMobileAds()  async{
-    // TODO: Initialize Google Mobile Ads SDK
-    return MobileAds.instance.initialize();
 
+  _showAboutUs(BuildContext context) {
+    Navigator.of(context).pop();
+    showAboutDialog(
+        context: context,
+        applicationVersion: "1.0.0",
+        applicationName: "Places",
+        applicationLegalese: "All right reserved @2021, XYZ Pvt. Ltd.",
+        applicationIcon: Image.asset(
+          "assets/images/logo.png",
+          width: 100,
+          height: 100,
+        ));
   }
 
-/*
-  void initializeAd(DashboardViewModel model) {
-    _ad = BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {},
-        onAdFailedToLoad: (ad, error) {
-          // Releases an ad resource when it fails to load
-          ad.dispose();
+  void _logout(BuildContext context, DashboardViewModel model) async {
+    Navigator.of(context).pop();
+    final response =
+        await showOverlayLoadingIndicator<bool>(context, model.logout());
 
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    );
-
-    // TODO: Load an ad
-    _ad.load();
-  }
-*/
-}
-/*
-
-late final FirebaseMessaging _messaging;
-
-
-
-void registerNotification(DashboardViewModel model) async {
-  // 1. Initialize the Firebase app
-
-
-  // 2. Instantiate Firebase Messaging
-  _messaging = FirebaseMessaging.instance;
-
-
-  // 3. On iOS, this helps to take the user permissions
-  NotificationSettings settings = await _messaging.requestPermission(
-    alert: true,
-    badge: true,
-    provisional: false,
-    sound: true,
-  );
-
-
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print('User granted permission');
-    // TODO: handle the received notifications
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // Parse the message received
-      PushNotification notification = PushNotification(
-        title: message.notification!.title!,
-        body: message.notification!.body!,
-      );
-
-
-    });
-    FirebaseMessaging.instance.getToken().then((token) {
-      if(token != null)
-        model.updateToken(token);
-    });
-  } else {
-    print('User declined or has not accepted permission');
+    // if response is true, then logout, else show an error message
+    if (response) {
+      //log out the user
+      Navigator.of(context).pushNamedAndRemoveUntil(RoutePaths.LOGIN,(route){
+        return route.settings.name == RoutePaths.LOGIN;
+      });
+    } else {
+      //show an error
+      showSnackBar(context, "Could not log you out now, please try again");
+    }
   }
 }
-class PushNotification{
-  final String title;
-  final String body;
-
-  PushNotification({required this.title,  required this.body});
-}
 
 
 
@@ -309,10 +280,3 @@ class PushNotification{
 
 
 
-
-
-
-
-
-
-*/

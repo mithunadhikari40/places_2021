@@ -27,4 +27,12 @@ class DashboardViewModel extends BaseViewModel {
   void updateToken(String token) {
     service.updateToken(token);
   }
+
+  void changeTheme() {
+    service.changeTheme();
+  }
+
+  Future<bool> logout() {
+    return service.logout();
+  }
 }

@@ -2,7 +2,6 @@ import 'package:location/location.dart';
 import 'package:places/src/core/base_view_model.dart';
 import 'package:places/src/model/dashboard/place_model.dart';
 import 'package:places/src/model/network_response_model.dart';
-import 'package:places/src/services/dashboard/favorite_service.dart';
 import 'package:places/src/services/dashboard/my_place_service.dart';
 
 class MyPlacesViewModel extends BaseViewModel {
