@@ -1,3 +1,4 @@
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:location/location.dart';
 import 'package:places/src/core/base_view_model.dart';
 import 'package:places/src/model/network_response_model.dart';
@@ -16,5 +17,12 @@ class ExploreViewModel extends BaseViewModel {
     setBusy(true);
     await service.getAllPlaces();
     setBusy(false);
+  }
+  bool _adLoaded = false;
+  bool get adLoaded => _adLoaded;
+
+  void setAdLoaded(bool val) {
+    _adLoaded = val;
+    notifyListeners();
   }
 }

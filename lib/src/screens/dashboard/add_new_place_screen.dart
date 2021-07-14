@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,10 @@ class AddNewPlaceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseWidget<PlacesViewModel>(
-        model: PlacesViewModel(service: Provider.of(context)),
+        model: PlacesViewModel(
+          service: Provider.of(context),
+          exploreService: Provider.of(context),
+        ),
         onModelReady: _onModelReady,
         builder: (context, PlacesViewModel model, Widget? child) {
           return Scaffold(
@@ -153,7 +155,6 @@ class AddNewPlaceScreen extends StatelessWidget {
         SizedBox(height: 12),
         _buildSubmitButton(context, model),
         SizedBox(height: 12),
-
       ],
     );
   }
@@ -257,7 +258,9 @@ class AddNewPlaceScreen extends StatelessWidget {
       MaterialPageRoute(
           builder: (_) {
             return MapInput(
-                onMapTapped: (loc) {}, isView:false, currentLocation: model.currentLocation);
+                onMapTapped: (loc) {},
+                isView: false,
+                currentLocation: model.currentLocation);
           },
           fullscreenDialog: true),
     );
@@ -321,7 +324,7 @@ class AddNewPlaceScreen extends StatelessWidget {
     return true;
   }
 
- void _onModelReady(PlacesViewModel model) {
+  void _onModelReady(PlacesViewModel model) {
     model.setInitialLocation();
   }
 }

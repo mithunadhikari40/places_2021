@@ -1,12 +1,17 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places/src/core/base_view_model.dart';
+import 'package:places/src/model/dashboard/place_model.dart';
 import 'package:places/src/model/network_response_model.dart';
+import 'package:places/src/screens/dashboard/explore_screen.dart';
+import 'package:places/src/services/dashboard/explore_service.dart';
 import 'package:places/src/services/dashboard/places_service.dart';
 
 class PlacesViewModel extends BaseViewModel {
   final PlacesService service;
 
-  PlacesViewModel({required this.service});
+  final ExploreService exploreService;
+
+  PlacesViewModel({required this.service, required this.exploreService});
 
   String? _imagePath;
 
@@ -66,6 +71,10 @@ class PlacesViewModel extends BaseViewModel {
         longitude: _location!.longitude,
         description: description,
         imagePath: _imagePath!);
+   if(response.status){
+     final PlaceModel place = response.data as PlaceModel;
+     exploreService.addNewPlace(place);
+   }
    setBusy(false);
    return response;
   }

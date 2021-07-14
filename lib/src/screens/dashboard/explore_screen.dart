@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:places/src/core/base_widget.dart';
 import 'package:places/src/core/constants/route_paths.dart';
 import 'package:places/src/model/dashboard/place_model.dart';
+import 'package:places/src/utils/ad_helper.dart';
 import 'package:places/src/viewmodels/dashboard/explore_view_model.dart';
 import 'package:places/src/widgets/error_view.dart';
 import 'package:places/src/widgets/loading_indicator.dart';
@@ -10,13 +12,17 @@ import 'package:places/src/widgets/place_item.dart';
 import 'package:provider/provider.dart';
 
 class ExploreScreen extends StatelessWidget {
-  const ExploreScreen({Key? key}) : super(key: key);
+  const ExploreScreen();
 
   @override
   Widget build(BuildContext context) {
     return BaseWidget<ExploreViewModel>(
         model: ExploreViewModel(service: Provider.of(context)),
-        onModelReady: (model) async => await model.initialize(),
+        onModelReady: (model) async {
+          // initializeAd(model);
+          await _initGoogleMobileAds();
+          await model.initialize();
+        },
         builder: (context, ExploreViewModel model, Widget? child) {
           return Container(
             padding: EdgeInsets.all(16),
@@ -35,43 +41,61 @@ class ExploreScreen extends StatelessWidget {
           callback: () async => await model.initialize());
     }
     return ListView.builder(
-      itemCount: model.places.data.length,
+      itemCount: model.places.data.length + (model.places.data.length)~/2  ,
       padding: EdgeInsets.only(bottom: 12),
       itemBuilder: (BuildContext context, int index) {
-        final PlaceModel place = model.places.data[index] as PlaceModel;
+
+        if(index %3 ==0 && index != 0){
+          return _buildAdView(model);
+        }
+
+        final PlaceModel place = model.places.data[index - (index~/2)] as PlaceModel;
         return InkWell(
-          onTap: (){
-            Navigator.of(context).pushNamed(RoutePaths.VIEW_DETAIL,arguments: place);
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(RoutePaths.VIEW_DETAIL, arguments: place);
           },
           child: PlaceItem(
             place: place,
             location: model.currentLocation,
-
           ),
         );
       },
     );
   }
-}
 
-/*
-return Container(
-      padding: EdgeInsets.all(12),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              "https://cdn.kimkim.com/files/a/content_articles/featured_photos/656bb11870d1786be69ae178e45d0723244384c6/big-3985131bf28128fdc4c2ffcd12779cb0.jpg",
-            ),
-          ),
-          SizedBox(height: 8,),
-          Text("Tinkune, theme park"), SizedBox(height: 8,),
-          Text("Tinkune, Kathmandu, Nepal"), SizedBox(height: 8,),
-          Text("It is a great place for family and friends to wander around and catcalling some stranger who also seek the peace and nature pristine calmness. "),
-          SizedBox(height: 12,)
+  Future<InitializationStatus> _initGoogleMobileAds() async {
+    return MobileAds.instance.initialize();
+  }
 
-        ],
+  Widget _buildAdView(ExploreViewModel model) {
+   final _ad = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          // model.setAdLoaded(true);
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          // ad.dispose();
+
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
       ),
     );
- */
+
+     // _ad.load();
+
+    return FutureBuilder(
+        future: _ad.load(),
+        builder: (context, snapshot) {
+          return Container(
+            width: _ad.size.width.toDouble(),
+            height: _ad.size.height.toDouble(),
+            child: AdWidget(ad: _ad),
+          );
+        });
+  }
+}

@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildCustomAppBar(
         // leading: Icon(Icons.close),
-        leading: Container(),
+        leading:  Container(),
         context: context,
         subTitle: "Login to your \n account",
       ),
@@ -71,7 +71,7 @@ class LoginScreen extends StatelessWidget {
               padding: EdgeInsets.zero,
             ),
             onPressed: () {},
-            child: Text(
+            child: const Text(
               "Forget Password ?",
               style: TextStyle(
                 fontSize: 14.0,
@@ -95,7 +95,7 @@ class LoginScreen extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(color: primaryColor, height: 1.5),
               children: [
-                TextSpan(
+               const TextSpan(
                     text: 'By continuing, you agree to our\n ',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(
@@ -111,7 +111,7 @@ class LoginScreen extends StatelessWidget {
                           ..onTap = () {
                             print("Terms and conditions clicked");
                           }),
-                    TextSpan(
+                   const TextSpan(
                       text: ' and ',
                     ),
                     TextSpan(
@@ -145,7 +145,7 @@ class LoginScreen extends StatelessWidget {
               : () {
                   _onSubmit(context, model);
                 },
-          child: model.busy ? CircularProgressIndicator() : Text("Submit"),
+          child: model.busy ? const CircularProgressIndicator() : const Text("Submit"),
         ),
       ),
     );
@@ -164,21 +164,21 @@ class LoginScreen extends StatelessWidget {
   Widget _buildSignUpSection(BuildContext context) {
     return Column(
       children: [
-        Divider(),
-        SizedBox(
+        const Divider(),
+     const   SizedBox(
           height: 8,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text("Don't have an account?"),
+         const   Text("Don't have an account?"),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   RoutePaths.REGISTER
                 );
               },
-              child: Text("Sign up"),
+              child: const Text("Sign up"),
               style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -188,7 +188,7 @@ class LoginScreen extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(
+       const SizedBox(
           height: 8,
         ),
       ],

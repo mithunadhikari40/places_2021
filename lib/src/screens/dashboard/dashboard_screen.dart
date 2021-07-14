@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,21 +14,18 @@ import 'package:places/src/viewmodels/dashboard/dashboard_view_model.dart';
 import 'package:places/src/widgets/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
-class DashboardScreen extends StatelessWidget  {
-  static const screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
+class DashboardScreen extends StatelessWidget {
+  static const  screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late final FirebaseMessaging _firebaseMessaging;
-  late BannerAd _ad;
-
-
-
+  // late final BannerAd _ad;
 
   @override
   Widget build(BuildContext context) {
     return BaseWidget<DashboardViewModel>(
         model: DashboardViewModel(service: Provider.of(context)),
-        onModelReady: (model) => _onModelReady(model,context),
+        onModelReady: (model) => _onModelReady(model, context),
         builder: (context, DashboardViewModel model, Widget? child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -42,10 +38,9 @@ class DashboardScreen extends StatelessWidget  {
   }
 
   AppBar _buildAppBar(DashboardViewModel model, BuildContext context) {
-    if(model.currentIndex == 2) return AppBar(toolbarHeight: 0);
+    if (model.currentIndex == 2) return AppBar(toolbarHeight: 0);
     return AppBar(
-      title:
-          Text(model.getAppbarTitle()),
+      title: Text(model.getAppbarTitle()),
       leading: IconButton(
         icon: Icon(
           Icons.menu,
@@ -155,88 +150,83 @@ class DashboardScreen extends StatelessWidget  {
     );
   }
 
- Future<void> _onModelReady(DashboardViewModel model, BuildContext context) async {
-   Location location =  Location();
+  Future<void> _onModelReady(
+      DashboardViewModel model, BuildContext context) async {
+    registerNotification(model);
 
-   bool? _serviceEnabled;
-   PermissionStatus? _permissionGranted;
-   LocationData? _locationData;
+    Location location = Location();
 
-   _serviceEnabled = await location.serviceEnabled();
-   if (!_serviceEnabled) {
-     _serviceEnabled = await location.requestService();
-     if (!_serviceEnabled) {
-       showSnackBar(context,"Places needs to have your location turned on to work properly");
-       return;
-     }
-   }
+    bool? _serviceEnabled;
+    PermissionStatus? _permissionGranted;
+    LocationData? _locationData;
 
-   _permissionGranted = await location.hasPermission();
-   if (_permissionGranted == PermissionStatus.denied) {
-     _permissionGranted = await location.requestPermission();
-     if (_permissionGranted != PermissionStatus.granted) {
-       showSnackBar(context,"Places needs to have your permission to access location to work properly");
-       return;
-     }
-   }
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        showSnackBar(context,
+            "Places needs to have your location turned on to work properly");
+        return;
+      }
+    }
 
-   _locationData = await location.getLocation();
-   model.setLocation(_locationData);
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        showSnackBar(context,
+            "Places needs to have your permission to access location to work properly");
+        return;
+      }
+    }
 
-   registerNotification(model);
-   initializeAd(model);
+    _locationData = await location.getLocation();
+    model.setLocation(_locationData);
 
-
-
-
-
-
+    // initializeAd(model);
   }
 
-  void registerNotification(DashboardViewModel model)  async{
+  void registerNotification(DashboardViewModel model) async {
     _firebaseMessaging = FirebaseMessaging.instance;
 
     NotificationSettings granted = await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: true
-    );
-    if(granted.authorizationStatus == AuthorizationStatus.authorized){
+        alert: true, badge: true, sound: true, provisional: true);
+    _firebaseMessaging.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
+    print("The access is this one ${granted.authorizationStatus}");
+    if (granted.authorizationStatus == AuthorizationStatus.authorized) {
       /// notification permission granted
       FirebaseMessaging.onMessage.listen((event) {
         print("notificatin data are ${event.data}");
-       // String title =  event.data["title"];
-       // String body =  event.data["body"];
-       ///// this is where we handle notification
+        // String title =  event.data["title"];
+        // String body =  event.data["body"];
+        ///// this is where we handle notification
       });
       _firebaseMessaging.getToken().then((token) {
-        if(token != null){
+        if (token != null) {
           model.updateToken(token);
         }
       });
-
-    }else{
+    } else {
       // show some error,
 
     }
+  }
+
+  Future<InitializationStatus> _initGoogleMobileAds()  async{
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
 
   }
 
-    Future<InitializationStatus> _initGoogleMobileAds() {
-      // TODO: Initialize Google Mobile Ads SDK
-      return MobileAds.instance.initialize();
-  }
-
+/*
   void initializeAd(DashboardViewModel model) {
     _ad = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       size: AdSize.banner,
       request: AdRequest(),
       listener: BannerAdListener(
-        onAdLoaded: (_) {
-
-        },
+        onAdLoaded: (_) {},
         onAdFailedToLoad: (ad, error) {
           // Releases an ad resource when it fails to load
           ad.dispose();
@@ -249,6 +239,7 @@ class DashboardScreen extends StatelessWidget  {
     // TODO: Load an ad
     _ad.load();
   }
+*/
 }
 /*
 

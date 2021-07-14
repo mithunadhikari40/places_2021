@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "1061920563926",
-    "firebase_url": "https://my-chat-app-1a62f.firebaseio.com",
-    "project_id": "my-chat-app-1a62f",
-    "storage_bucket": "my-chat-app-1a62f.appspot.com"
+    "project_number": "287198122227",
+    "firebase_url": "https://my-personal-portfolio-75de9-default-rtdb.firebaseio.com",
+    "project_id": "my-personal-portfolio-75de9",
+    "storage_bucket": "my-personal-portfolio-75de9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:e38519c0688faf6843df77",
+        "mobilesdk_app_id": "1:287198122227:android:a7210b96769027b4c22786",
         "android_client_info": {
-          "package_name": "np.com.bsi.door2door"
+          "package_name": "com.sunpakdelivery.sunpakdelivery"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1061920563926-mfj7cgv5si0v33764b2hbnr08kbrgtv6.apps.googleusercontent.com",
+          "client_id": "287198122227-a200p648i7f2sis3eu6dh46j9lnracsb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "np.com.bsi.door2door",
-            "certificate_hash": "60460072f64147cd09404f09e9e465324a4bce8d"
+            "package_name": "com.sunpakdelivery.sunpakdelivery",
+            "certificate_hash": "fb9fbdba16892e8118d1c2bbf59d507af83b9b6d"
           }
         },
         {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
+          "client_id": "287198122227-qq9ga3rrkl8rumgv869cbda4ctde1jlq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
+          "current_key": "AIzaSyBOjNtT5j2fJhM8HthJ741GKV8JX5N6dzQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
+              "client_id": "287198122227-qq9ga3rrkl8rumgv869cbda4ctde1jlq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,204 +45,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:76d1181f5f03ae0043df77",
-        "android_client_info": {
-          "package_name": "np.com.bsi.first_link"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1061920563926-ll5kap8gkbcun5p9dudmjvp1s5761t95.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "np.com.bsi.first_link",
-            "certificate_hash": "60460072f64147cd09404f09e9e465324a4bce8d"
-          }
-        },
-        {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:77c761a7053d613f43df77",
-        "android_client_info": {
-          "package_name": "np.com.bsi.kudhyo_rider"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:5c9cc91ee016e10b43df77",
-        "android_client_info": {
-          "package_name": "np.com.bsi.mehedy"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1061920563926-i3batdb6jnicdpot4ajfpj9nugbkb47v.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "np.com.bsi.mehedy",
-            "certificate_hash": "60460072f64147cd09404f09e9e465324a4bce8d"
-          }
-        },
-        {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:451141305e19919643df77",
+        "mobilesdk_app_id": "1:287198122227:android:934a4ec4ee507c16c22786",
         "android_client_info": {
           "package_name": "np.com.bsi.places"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1061920563926-vgu3ln7atg01li442fmdbiiphl5uvt3f.apps.googleusercontent.com",
+          "client_id": "287198122227-m3eaooldl08nka30at58ov4ovr7gq11q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "np.com.bsi.places",
-            "certificate_hash": "60460072f64147cd09404f09e9e465324a4bce8d"
+            "certificate_hash": "fb9fbdba16892e8118d1c2bbf59d507af83b9b6d"
           }
         },
         {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
+          "client_id": "287198122227-qq9ga3rrkl8rumgv869cbda4ctde1jlq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
+          "current_key": "AIzaSyBOjNtT5j2fJhM8HthJ741GKV8JX5N6dzQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:2b4ff84bd14ff26943df77",
-        "android_client_info": {
-          "package_name": "np.com.bsi.rara_eats_driver"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1061920563926:android:a16832efa918032a43df77",
-        "android_client_info": {
-          "package_name": "np.com.bsi.uber_eats_nepali"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1061920563926-5llee6r6i6gu4sk7bvo3fp4v2ok3gu2i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "np.com.bsi.uber_eats_nepali",
-            "certificate_hash": "60460072f64147cd09404f09e9e465324a4bce8d"
-          }
-        },
-        {
-          "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCHqs0aKt7NTncl6mrj7M_DsEJpwpgc8_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1061920563926-03hlvvneqqps99hhk4vfm7eaftuug8gm.apps.googleusercontent.com",
+              "client_id": "287198122227-qq9ga3rrkl8rumgv869cbda4ctde1jlq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
