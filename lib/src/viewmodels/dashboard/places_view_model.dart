@@ -70,10 +70,7 @@ class PlacesViewModel extends BaseViewModel {
         longitude: _location!.longitude,
         description: description,
         imagePath: _imagePath!);
-    if (response.status) {
-      final PlaceModel place = response.data as PlaceModel;
-      exploreService.addNewPlace(place);
-    }
+
     setBusy(false);
     return response;
   }

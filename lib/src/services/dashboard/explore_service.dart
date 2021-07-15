@@ -13,16 +13,19 @@ class ExploreService {
 
   ExploreService({required this.api, required this.authRxProvider});
 
-  NetworkResponseModel? _places = NetworkResponseModel(status: true,data: []);
+  NetworkResponseModel _places = NetworkResponseModel(status: true,data: []);
 
-  NetworkResponseModel get places => _places!;
+  NetworkResponseModel get places => _places;
 
- final BehaviorSubject<List<PlaceModel>> _placesController = BehaviorSubject();
-  Stream<List<PlaceModel>> get placeStream => _placesController.stream;
+  BehaviorSubject<List<PlaceModel>> _placeSubject = BehaviorSubject();
+  Stream<List<PlaceModel>> get placeStream => _placeSubject.stream;
 
-  void jjj(){
-    _placesController.close();
+
+  void closeStream(){
+    _placeSubject.close();
   }
+
+
 
   LocationData? get currentLocation => authRxProvider.getLocation;
 
@@ -33,26 +36,22 @@ class ExploreService {
     //   String value  = response.data;
     // }
     _places = response;
-    print("Is this place model null ${_places == null} and ${places.status}");
-
-    if(_places!.status){
-      List<PlaceModel> list = _places!.data!.cast<PlaceModel>();
-      print("The list is this one ${list.map((e) => e.toJson())}");
-      _placesController.sink.add(list);
+    if(_places.status){
+      List<PlaceModel> existingList = _places.data.cast<PlaceModel>();
+      _placeSubject.sink.add(existingList);
 
     }
     await Future.delayed(Duration.zero);
   }
 
   void addNewPlace(PlaceModel place){
-    print("This place response is this one ${place.toJson()}");
-    List<PlaceModel> _existing = _placesController.value;
-    _existing.add(place);
-    _places!.data = _existing;
-    _placesController.sink.add(_existing);
-    print("This place response is this one ${_existing.map((e) => e.name)}");
-    print("This place response is this one ${_existing.map((e) => e.sId)}");
-
-
+    List<PlaceModel> existing = _placeSubject.value;
+    existing.add(place);
+    _placeSubject.sink.add(existing);
+    _places.data = existing;
+    print("the places are ${existing.map((e) => e.name)}");
   }
+
+
+
 }

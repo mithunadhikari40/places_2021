@@ -35,4 +35,8 @@ class DashboardViewModel extends BaseViewModel {
   Future<bool> logout() {
     return service.logout();
   }
+
+  void reloadData() {
+    notifyListeners();
+  }
 }

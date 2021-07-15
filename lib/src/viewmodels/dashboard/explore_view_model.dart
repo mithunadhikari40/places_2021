@@ -13,7 +13,10 @@ class ExploreViewModel extends BaseViewModel {
 
   NetworkResponseModel get places => service.places;
 
+
   Stream<List<PlaceModel>> get placeStream => service.placeStream;
+
+
 
   Future<void> initialize() async {
     setBusy(true);

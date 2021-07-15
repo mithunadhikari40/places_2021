@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/src/core/base_widget.dart';
+import 'package:places/src/services/dashboard/explore_service.dart';
 import 'package:places/src/utils/location_helper.dart';
 import 'package:places/src/utils/snackbar_helper.dart';
 import 'package:places/src/viewmodels/dashboard/places_view_model.dart';
@@ -303,6 +304,7 @@ class AddNewPlaceScreen extends StatelessWidget {
       showSnackBar(context, response.message!);
     } else {
       showSnackBar(context, "Successfully added a new place");
+      Provider.of<ExploreService>(context,listen: false).addNewPlace(response.data);
       Navigator.of(context).pop();
     }
   }

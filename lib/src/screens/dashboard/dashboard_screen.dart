@@ -59,8 +59,9 @@ class DashboardScreen extends StatelessWidget {
             Icons.add,
             size: 40,
           ),
-          onPressed: () {
+          onPressed: () async {
             Navigator.of(context).pushNamed(RoutePaths.ADD_NEW);
+
           },
         ),
         SizedBox(
